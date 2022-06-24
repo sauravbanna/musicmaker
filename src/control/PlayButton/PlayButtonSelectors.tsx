@@ -1,0 +1,1 @@
+export const playSelector = (state : any) => state.play
