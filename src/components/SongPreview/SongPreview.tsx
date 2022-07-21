@@ -5,13 +5,12 @@ import Grid from "@mui/material/Grid"
 import Accordion from "@mui/material/Accordion"
 import AccordionSummary from "@mui/material/AccordionSummary"
 import AccordionDetails from "@mui/material/AccordionDetails"
-import FadeInComponent from "../FadeInComponent/FadeInComponent"
 import SongPreviewButtons from "./SongPreviewButtons"
 import SongComments from "./SongComments"
 import AppDivider from "../AppDivider/AppDivider"
-import {SONG_PREVIEW_HEIGHT, FADE_IN} from "../../utils/constants"
-import {gsap} from "gsap"
-import {useRef, useEffect, useState} from 'react'
+import useFadeInComponent from "../../hooks/useFadeInComponent"
+import {SONG_PREVIEW_HEIGHT} from "../../utils/constants"
+import {useState} from 'react'
 
 interface IOpacityRef {
     opacity: number
@@ -19,88 +18,88 @@ interface IOpacityRef {
 
 function SongPreview({title, date, author, duration, id, image, likes, comments, index} : ISongPreviewProps) {
     const [expanded, setExpanded] = useState<boolean>(false);
+    const fadeDiv = useFadeInComponent(index);
 
     return (
-        <FadeInComponent index={index}>
-            <Paper
-                variant="outlined"
+        <Paper
+            ref={fadeDiv}
+            variant="outlined"
+            sx=
+                {
+                    {
+                        borderRadius: "0.8em",
+                        overflow: "hidden"
+                    }
+                }
+        >
+            <Grid
+                container
+                justifyContent="space-around"
+                spacing={2}
                 sx=
                     {
                         {
-                            borderRadius: "0.8em",
-                            overflow: "hidden"
+                            padding: "0.8em"
                         }
                     }
             >
-                <Grid
-                    container
-                    justifyContent="space-around"
-                    spacing={2}
-                    sx=
-                        {
-                            {
-                                padding: "0.8em"
-                            }
-                        }
-                >
-                    <Grid item>
-                        <img src={require("../../assets/download.png")} height={"100vh"} width={"100vh"} />
-                    </Grid>
-                    <Grid
-                        item
-                        xs={9}
-                    >
-                        <Grid container>
-                            <Grid item xs={7}>
-                                <Typography
-                                    variant="h5"
-                                >
-                                    {title}
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={5} sx={{display: "flex", justifyContent: "flex-end"}}>
-                                <Typography
-                                    variant="subtitle1"
-                                >
-                                    {date}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        <Typography
-                            variant="subtitle1"
-                            style={{color: "grey"}}
-                        >
-                            {author}
-                            &nbsp;
-                            |
-                            &nbsp;
-                            {duration}
-                        </Typography>
-                        &nbsp;
-                        <SongPreviewButtons id={id} likes={likes} comments={comments} expanded={expanded} setExpand={setExpanded} />
-                    </Grid>
+                <Grid item>
+                    <img src={require("../../assets/download.png")} height={"100vh"} width={"100vh"} />
                 </Grid>
-                <Accordion
-                    disableGutters
-                    expanded={expanded}
+                <Grid
+                    item
+                    xs={9}
                 >
-                    <AccordionSummary
-                        sx={
-                            {
-                                display: "none"
-                            }
-                        }
+                    <Grid container>
+                        <Grid item xs={7}>
+                            <Typography
+                                variant="h5"
+                            >
+                                {title}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={5} sx={{display: "flex", justifyContent: "flex-end"}}>
+                            <Typography
+                                variant="subtitle1"
+                            >
+                                {date}
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                    <Typography
+                        variant="subtitle1"
+                        style={{color: "grey"}}
                     >
-
-                    </AccordionSummary>
-                    <AccordionDetails sx={{overflow: "hidden"}}>
-                        <AppDivider orientation="horizontal"/>
+                        {author}
                         &nbsp;
-                        <SongComments id={id}/>
-                    </AccordionDetails>
-                </Accordion>
-            </Paper>
-        </FadeInComponent>
+                        |
+                        &nbsp;
+                        {duration}
+                    </Typography>
+                    &nbsp;
+                    <SongPreviewButtons id={id} likes={likes} comments={comments} expanded={expanded} setExpand={setExpanded} />
+                </Grid>
+            </Grid>
+            <Accordion
+                disableGutters
+                expanded={expanded}
+            >
+                <AccordionSummary
+                    sx={
+                        {
+                            display: "none"
+                        }
+                    }
+                >
+
+                </AccordionSummary>
+                <AccordionDetails sx={{overflow: "hidden"}}>
+                    <AppDivider orientation="horizontal"/>
+                    &nbsp;
+                    <SongComments id={id}/>
+                </AccordionDetails>
+            </Accordion>
+        </Paper>
     );
 }
 

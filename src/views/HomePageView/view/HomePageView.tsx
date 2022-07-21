@@ -23,12 +23,12 @@ const HomePageView = () => {
                         position: "absolute",
                         top: "5%",
                         maxWidth: "70%",
-                        display: "flex"
+                        display: "flex",
                     }
                 }
-                spacing={4}
+                spacing={5}
             >
-                <Grid item xs={12} >
+                <Grid item xs={12}>
                     <FollowedArtists />
                 </Grid>
                 <Grid item xs={12}>

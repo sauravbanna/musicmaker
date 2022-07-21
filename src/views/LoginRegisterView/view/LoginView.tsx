@@ -12,7 +12,7 @@ const LoginView = () => {
         else return false
     }
 
-    const onSubmit = (username: string, password: string) => {
+    const onSubmit = (email: string, username: string, password: string) => {
         console.log(username + " " + password + " " + "Registered!");
     }
 

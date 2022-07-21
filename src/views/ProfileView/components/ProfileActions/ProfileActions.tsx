@@ -50,7 +50,7 @@ function ProfileActions() {
                     alignItems="center"
                 >
                     <AppButton name="Follow"><FavoriteBorderIcon fontSize="small"/></AppButton>
-\                   <AppButton name="Share"><SendIcon fontSize="small" /></AppButton>
+                    <AppButton name="Share"><SendIcon fontSize="small" /></AppButton>
                     <AppButton name=""><MoreHorizIcon fontSize="small" /></AppButton>
                 </Stack>
             </div>

@@ -1,16 +1,20 @@
 import LoginRegisterView from "../components/LoginRegister/LoginRegisterView"
+import registerUser, {checkUniqueUsername} from "../backend/RegisterAuth"
 
 const RegisterView = () => {
     const validateUsername = (username: string) => {
-        return username != "User1"
+        var bool : boolean = checkUniqueUsername(username);
+
+        console.log(bool);
+        return bool;
     }
 
     const validatePassword = (username: string, password: string) => {
         return password.length >= 8
     }
 
-    const register = (username: string, password: string) => {
-        console.log("Registered New Account: " + username + " " + password);
+    const register = (email: string, username: string, password: string) => {
+        registerUser(email. username, password);
     }
 
     return (
