@@ -1,6 +1,6 @@
 import {getAuth, createUserWithEmailAndPassword} from "firebase/auth"
 import {database} from "../../../utils/config"
-import {doc, setDoc, collection} from "firebase/firestore"
+import {doc, setDoc, getDoc} from "firebase/firestore"
 
 const registerUser = (email: string, username: string, password: string) => {
     let userId = "";
@@ -21,23 +21,32 @@ const registerUser = (email: string, username: string, password: string) => {
 }
 
 const addUserToDb = async (id: string, username: string) => {
-    await setDoc(doc(database, "users", username), {
+    await setDoc(doc(database, id, username), {
         followerCount: 0,
         followers: [],
         following: [],
         followingCount: 0,
         likedTracks: [],
         tracks: [],
-        id: id
+        id: id,
+        username: username
     })
 }
 
-export const checkUniqueUsername = (username: string) => {
-    var userDocRef = database.collection("users").doc(username);
+export const checkUniqueUsername = (username: string) : boolean => {
+    var userDocRef = doc(database, "users", username);
 
-    userDocRef.get().then((doc) => {
-        return doc.exists;
+    var existsCheck : boolean = false;
+
+    getDoc(userDocRef).then((doc) => {
+        if (doc.exists()) {
+            existsCheck = true;
+        } else {
+            existsCheck = false;
+        }
     });
+
+    return !existsCheck;
 }
 
-export default RegisterUser
+export default registerUser

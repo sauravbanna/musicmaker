@@ -14,7 +14,7 @@ const RegisterView = () => {
     }
 
     const register = (email: string, username: string, password: string) => {
-        registerUser(email. username, password);
+        registerUser(email, username, password);
     }
 
     return (

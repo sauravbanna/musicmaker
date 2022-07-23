@@ -41,6 +41,10 @@ const LoginRegisterView = ({login, usernameFail, passwordFail, usernameValidate,
     const validateAndSubmit = (e: any) => {
         e.stopPropagation();
 
+        if (username.length == 0 || password.length == 0) {
+            return
+        }
+
         if (login || emailValidate(email)) {
             if (usernameValidate(username)) {
                 setUsernameError(false);
