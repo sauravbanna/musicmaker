@@ -21,45 +21,45 @@ test("Tracks collection can be read when logged in", async () => {
 })
 
 test("New track can be created when logged in if track request is by logged in user", async () => {
-    const testUserDoc = db(true).collection("tracks").doc("track1");
+    const testTrackDoc = db(true).collection("tracks").doc("track1");
 
-    expect(assertSucceeds(testUserDoc.set({author: 'user1'}))).resolves.toBeDefined();
+    expect(assertSucceeds(testTrackDoc.set({author: 'user1'}))).resolves.toBeDefined();
 })
 
 test("New track cannot be created when logged in if track request is not by logged in user", async () => {
-    const testUserDoc = db(true).collection("tracks").doc("track1");
+    const testTrackDoc = db(true).collection("tracks").doc("track1");
 
-    expect(assertFails(testUserDoc.set({author: 'user2'}))).resolves.toBeDefined();
+    expect(assertFails(testTrackDoc.set({author: 'user2'}))).resolves.toBeDefined();
 })
 
 test("New track cannot be created when not logged in", async () => {
 
-    const testUserDoc = db(false).collection("tracks").doc("track1");
+    const testTrackDoc = db(false).collection("tracks").doc("track1");
 
-    expect(assertFails(testUserDoc.set({author: 'user1'}))).resolves.toBeDefined();
+    expect(assertFails(testTrackDoc.set({author: 'user1'}))).resolves.toBeDefined();
 })
 
-test("Track fields (except likes) can be updated by owner only", async () => {
-    let testUserDoc = db(true).collection("tracks").doc("track1");
+test("Track fields can be updated by owner only", async () => {
+    let testTrackDoc = db(true).collection("tracks").doc("track1");
 
-    await testUserDoc.set({authorId: 'user1'});
+    await testTrackDoc.set({authorId: 'user1'});
 
-    expect(assertSucceeds(testUserDoc.set({title: 'title1'}))).resolves.toBeDefined();
+    expect(assertSucceeds(testTrackDoc.set({title: 'title1'}))).resolves.toBeDefined();
 
     const newDb = testEnv.authenticatedContext('user2').firestore();
 
-    testUserDoc = newDb.collection("tracks").doc('track1');
+    testTrackDoc = newDb.collection("tracks").doc('track1');
 
-    expect(assertFails(testUserDoc.set({title: 'user2'}))).resolves.toBeDefined();
+    expect(assertFails(testTrackDoc.set({title: 'user2'}))).resolves.toBeDefined();
 })
 
 
 
 
 const readTracksCollection = (db, pass, trackId) => {
-    const testUserDoc = db.collection("tracks").doc(trackId);
+    const testTrackDoc = db.collection("tracks").doc(trackId);
 
-    return pass ? assertSucceeds(testUserDoc.get()) : assertFails(testUserDoc.get());
+    return pass ? assertSucceeds(testTrackDoc.get()) : assertFails(testTrackDoc.get());
 }
 
 const db = (loggedIn) => {
