@@ -23,20 +23,20 @@ test("Tracks collection can be read when logged in", async () => {
 test("New track can be created when logged in if track request is by logged in user", async () => {
     const testTrackDoc = db(true).collection("tracks").doc("track1");
 
-    expect(assertSucceeds(testTrackDoc.set({author: 'user1'}))).resolves.toBeDefined();
+    expect(assertSucceeds(testTrackDoc.set({authorId: 'user1'}))).resolves.toBeUndefined();
 })
 
 test("New track cannot be created when logged in if track request is not by logged in user", async () => {
     const testTrackDoc = db(true).collection("tracks").doc("track1");
 
-    expect(assertFails(testTrackDoc.set({author: 'user2'}))).resolves.toBeDefined();
+    expect(assertFails(testTrackDoc.set({authorId: 'user2'}))).resolves.toBeDefined();
 })
 
 test("New track cannot be created when not logged in", async () => {
 
     const testTrackDoc = db(false).collection("tracks").doc("track1");
 
-    expect(assertFails(testTrackDoc.set({author: 'user1'}))).resolves.toBeDefined();
+    expect(assertFails(testTrackDoc.set({authorId: 'user1'}))).resolves.toBeDefined();
 })
 
 test("Track fields can be updated by owner only", async () => {
@@ -44,7 +44,7 @@ test("Track fields can be updated by owner only", async () => {
 
     await testTrackDoc.set({authorId: 'user1'});
 
-    expect(assertSucceeds(testTrackDoc.set({title: 'title1'}))).resolves.toBeDefined();
+    expect(assertSucceeds(testTrackDoc.set({title: 'title1'}))).resolves.toBeUndefined();
 
     const newDb = testEnv.authenticatedContext('user2').firestore();
 

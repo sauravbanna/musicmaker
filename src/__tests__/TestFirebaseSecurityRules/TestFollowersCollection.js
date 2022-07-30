@@ -23,15 +23,17 @@ test("Followers collection can be read when logged in", async () => {
 test("The currently logged in user can create their followers doc if they have a doc in users collection", async () => {
     const database = db(true);
 
-    const testFollowersDoc = database.collection("followers").doc("user1");
+    let testFollowersDoc = database.collection("followers").doc("user1");
 
     expect(assertFails(testFollowersDoc.set({followers: []}))).resolves.toBeDefined();
 
     const testUserDoc = database.collection("users").doc("user1");
 
-    await testUserDoc.set({about: "Wow"});
+    await testUserDoc.set({about: "Wow", following: []});
 
-    expect(assertSucceeds(testFollowersDoc.set({followers: []}))).resolves.toBeDefined();
+    testFollowersDoc = database.collection("followers").doc("user1");
+
+    expect(assertSucceeds(testFollowersDoc.set({followers: []}))).resolves.toBeUndefined();
 })
 
 test("The currently logged in user cannot create other user's followers doc", async () => {
@@ -39,9 +41,9 @@ test("The currently logged in user cannot create other user's followers doc", as
 
     const testUserDoc = database.collection("users").doc("user1");
 
-    await testUserDoc.set({about: "Wow"});
+    await testUserDoc.set({about: "Wow", following: []});
 
-    database = testEnv.authenticatedContext('user2');
+    database = testEnv.authenticatedContext('user2').firestore();
 
     let testFollowersDoc = database.collection("followers").doc("user1");
 
@@ -50,10 +52,6 @@ test("The currently logged in user cannot create other user's followers doc", as
     testFollowersDoc = database.collection("followers").doc("user3");
 
     expect(assertFails(testFollowersDoc.set({followers: []}))).resolves.toBeDefined();
-
-
-
-    expect(assertSucceeds(testFollowersDoc.set({followers: []}))).resolves.toBeDefined();
 })
 
 test("Any logged in user can update another user's followers doc, but only with their user Id", async () => {
@@ -63,7 +61,7 @@ test("Any logged in user can update another user's followers doc, but only with 
 
     await testFollowersDoc.set({followers: []});
 
-    database = testEnv.authenticatedContext('user2');
+    database = testEnv.authenticatedContext('user2').firestore();
 
     testFollowersDoc = database.collection("followers").doc("user1");
 
@@ -95,7 +93,7 @@ test("Any logged in user cannot update another user's followers doc if already f
 
     await testFollowersDoc.set({followers: []});
 
-    database = testEnv.authenticatedContext('user2');
+    database = testEnv.authenticatedContext('user2').firestore();
 
     testFollowersDoc = database.collection("followers").doc("user1");
 
@@ -111,7 +109,7 @@ test("Any logged in user cannot update another user's followers doc with more th
 
     await testFollowersDoc.set({followers: []});
 
-    database = testEnv.authenticatedContext('user2');
+    database = testEnv.authenticatedContext('user2').firestore();
 
     testFollowersDoc = database.collection("followers").doc("user1");
 

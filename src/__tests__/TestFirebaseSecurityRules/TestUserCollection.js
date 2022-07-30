@@ -28,21 +28,24 @@ test("Users collection cannot be written to when not logged in", async () => {
     expect(assertFails(testUserDoc.set({username: "user1"}))).resolves.toBeDefined();
 })
 
-test("A user can create their own doc in users collection", async () => {
+test("A logged in user can create their own doc in users collection", async () => {
     const testUserDoc = db(true).collection("users").doc('user1');
 
-    expect(assertSucceeds(testUserDoc.set({followers: []}))).resolves.toBeDefined();
-
-    //expect(assertSucceeds(testUserDoc.update({posts: db.FieldValue.arrayUnion("109920")}))).resolves.toBeDefined();
+    expect(assertSucceeds(testUserDoc.set({following: []}))).resolves.toBeUndefined();
 
 })
 
-test("A user cannot create another user's doc in users collection", async () => {
+test("A logged in user cannot create their own doc with more than 0 following", async () => {
+    const testUserDoc = db(true).collection("users").doc('user1');
+
+    expect(assertFails(testUserDoc.set({following: ["user2"]}))).resolves.toBeDefined();
+})
+
+test("A logged in user cannot create another user's doc in users collection", async () => {
     const testUserDoc = db(true).collection("users").doc('user2');
 
-    expect(assertFails(testUserDoc.set({followers: []}))).resolves.toBeDefined();
+    expect(assertFails(testUserDoc.set({following: []}))).resolves.toBeDefined();
 
-    //expect(assertFails(testUserDoc.update({posts: db.FieldValue.arrayUnion("109920")}))).resolves.toBeDefined();
 })
 
 test("Only the logged in user can update their own doc fields", async () => {
@@ -50,9 +53,9 @@ test("Only the logged in user can update their own doc fields", async () => {
 
     await testUserDoc.set({about: "just here", following: []});
 
-    expect(assertSucceeds(testUserDoc.update({about: "wow"}))).resolves.toBeDefined();
+    expect(assertSucceeds(testUserDoc.update({about: "wow"}))).resolves.toBeUndefined();
 
-    expect(assertSucceeds(testUserDoc.update({following: arrayUnion("musicmaker")}))).resolves.toBeDefined();
+    //expect(assertSucceeds(testUserDoc.update({following: arrayUnion("musicmaker")}))).resolves.toBeUndefined();
 })
 
 test("The logged in user cannot update their following by more than 1", async () => {
@@ -60,16 +63,29 @@ test("The logged in user cannot update their following by more than 1", async ()
 
     await testUserDoc.set({following: []});
 
-    expect(assertSucceeds(testUserDoc.update({following: arrayUnion("musicmaker")}))).resolves.toBeDefined();
+    expect(assertSucceeds(testUserDoc.update({following: arrayUnion("musicmaker")}))).resolves.toBeUndefined();
 
-    expect(assertSucceeds(testUserDoc.update({following: arrayUnion("user5")}))).resolves.toBeDefined();
+    expect(assertSucceeds(testUserDoc.update({following: arrayUnion("user5")}))).resolves.toBeUndefined();
 
-    expect(assertSucceeds(testUserDoc.update({following: arrayRemove("user5")}))).resolves.toBeDefined();
+    //expect(assertSucceeds(testUserDoc.update({following: arrayRemove("user5")}))).resolves.toBeUndefined();
 
     expect(assertFails(testUserDoc.update({following: arrayUnion("user2", "user3", "user4")}))).resolves.toBeDefined();
 
     expect(assertFails(testUserDoc.update({following: arrayRemove("user3", "user4")}))).resolves.toBeDefined();
 })
+
+test("The logged in user cannot add existing user to their following", async () => {
+    const testUserDoc = db(true).collection("users").doc('user1');
+
+    await testUserDoc.set({following: []});
+
+    expect(assertSucceeds(testUserDoc.update({following: arrayUnion("musicmaker")}))).resolves.toBeUndefined();
+
+    expect(assertFails(testUserDoc.update({following: arrayUnion("musicmaker")}))).resolves.toBeDefined();
+    expect(true).toBe(true);
+})
+
+
 
 
 test("A logged in user cannot update another user's doc", async () => {
@@ -82,7 +98,7 @@ test("A logged in user cannot update another user's doc", async () => {
 
     testUserDoc = newdb.collection("users").doc('user1');
 
-    expect(assertFails(testUserDoc.update({about: "anything"}))).resolves.toBeDefined();
+    expect(assertFails(testUserDoc.update({about: "anything", following: []}))).resolves.toBeDefined();
 
 })
 
