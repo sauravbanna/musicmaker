@@ -1,5 +1,5 @@
 import {initializeTestEnvironment, assertFails, assertSucceeds} from '@firebase/rules-unit-testing'
-import {setLogLevel, arrayUnion, arrayRemove} from 'firebase/firestore'
+import {setLogLevel, arrayUnion, arrayRemove, doc, getDoc} from 'firebase/firestore'
 import {testEnvSetup} from './Utils'
 
 const PROJECT_ID = "musicmaker-9c83c"
@@ -20,30 +20,17 @@ test("Followers collection can be read when logged in", async () => {
     expect(readFollowersCollection(db(true), true, 'user1')).resolves.toBeDefined();
 })
 
-test("The currently logged in user can create their followers doc if they have a doc in users collection", async () => {
+test("The currently logged in user can create their own followers doc", async () => {
     const database = db(true);
 
     let testFollowersDoc = database.collection("followers").doc("user1");
-
-    expect(assertFails(testFollowersDoc.set({followers: []}))).resolves.toBeDefined();
-
-    const testUserDoc = database.collection("users").doc("user1");
-
-    await testUserDoc.set({about: "Wow", following: []});
-
-    testFollowersDoc = database.collection("followers").doc("user1");
 
     expect(assertSucceeds(testFollowersDoc.set({followers: []}))).resolves.toBeUndefined();
 })
 
 test("The currently logged in user cannot create other user's followers doc", async () => {
-    let database = db(true);
 
-    const testUserDoc = database.collection("users").doc("user1");
-
-    await testUserDoc.set({about: "Wow", following: []});
-
-    database = testEnv.authenticatedContext('user2').firestore();
+    let database = testEnv.authenticatedContext('user2').firestore();
 
     let testFollowersDoc = database.collection("followers").doc("user1");
 
@@ -54,7 +41,7 @@ test("The currently logged in user cannot create other user's followers doc", as
     expect(assertFails(testFollowersDoc.set({followers: []}))).resolves.toBeDefined();
 })
 
-test("Any logged in user can update another user's followers doc, but only with their user Id", async () => {
+test("Any logged in user can update another user's followers doc", async () => {
     let database = db(true);
 
     let testFollowersDoc = database.collection("followers").doc("user1");
@@ -63,59 +50,11 @@ test("Any logged in user can update another user's followers doc, but only with 
 
     database = testEnv.authenticatedContext('user2').firestore();
 
-    testFollowersDoc = database.collection("followers").doc("user1");
+    expect(assertSucceeds(testFollowersDoc.update({followers: arrayUnion("user2")}))).resolves.toBeUndefined();
 
-    expect(assertSucceeds(testFollowersDoc.update({followers: arrayUnion("user2")}))).resolves.toBeDefined();
-
-    expect(assertFails(testFollowersDoc.update({followers: arrayUnion("user3")}))).resolves.toBeDefined();
-
-    expect(assertSucceeds(testFollowersDoc.update({followers: arrayRemove("user2")}))).resolves.toBeDefined();
+    expect(assertSucceeds(testFollowersDoc.update({followers: arrayRemove("user2")}))).resolves.toBeUndefined();
 
 })
-
-test("A logged in user cannot update their own followers doc", async () => {
-    let database = db(true);
-
-    let testFollowersDoc = database.collection("followers").doc("user1");
-
-    await testFollowersDoc.set({followers: []});
-
-    expect(assertFails(testFollowersDoc.update({followers: arrayUnion("user1")}))).resolves.toBeDefined();
-
-    expect(assertFails(testFollowersDoc.update({followers: arrayUnion("user2")}))).resolves.toBeDefined();
-
-})
-
-test("Any logged in user cannot update another user's followers doc if already following", async () => {
-    let database = db(true);
-
-    let testFollowersDoc = database.collection("followers").doc("user1");
-
-    await testFollowersDoc.set({followers: []});
-
-    database = testEnv.authenticatedContext('user2').firestore();
-
-    testFollowersDoc = database.collection("followers").doc("user1");
-
-    expect(assertSucceeds(testFollowersDoc.update({followers: arrayUnion("user2")}))).resolves.toBeDefined();
-
-    expect(assertFails(testFollowersDoc.update({followers: arrayUnion("user2")}))).resolves.toBeDefined();
-})
-
-test("Any logged in user cannot update another user's followers doc with more than 1 entry", async () => {
-    let database = db(true);
-
-    let testFollowersDoc = database.collection("followers").doc("user1");
-
-    await testFollowersDoc.set({followers: []});
-
-    database = testEnv.authenticatedContext('user2').firestore();
-
-    testFollowersDoc = database.collection("followers").doc("user1");
-
-    expect(assertFails(testFollowersDoc.update({followers: arrayUnion("user2", "user3", "user4")}))).resolves.toBeDefined();
-})
-
 
 
 const readFollowersCollection = (db, pass, userId) => {
