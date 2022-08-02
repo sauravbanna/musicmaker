@@ -1,19 +1,10 @@
 import LoginRegisterView from "../components/LoginRegister/LoginRegisterView"
+import {loginUser} from "../backend/LoginAuth"
 
 const LoginView = () => {
-    const usernameValidate = (username: string) => {
-        return username === "User1"
-    }
-
-    const passwordValidate = (username: string, password: string) => {
-        if (username === "User1") {
-            return password === "yeah"
-        }
-        else return false
-    }
 
     const onSubmit = (email: string, username: string, password: string) => {
-        console.log(username + " " + password + " " + "Registered!");
+        return loginUser(username, password);
     }
 
     return (
@@ -21,8 +12,6 @@ const LoginView = () => {
             login={true}
             usernameFail="That user does not exist"
             passwordFail="Wrong Password"
-            usernameValidate={usernameValidate}
-            passwordValidate={passwordValidate}
             onSubmit={onSubmit}
         />
     );

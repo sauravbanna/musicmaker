@@ -49,9 +49,9 @@ function ProfileActions() {
                     justifyContent="space-evenly"
                     alignItems="center"
                 >
-                    <AppButton name="Follow"><FavoriteBorderIcon fontSize="small"/></AppButton>
-                    <AppButton name="Share"><SendIcon fontSize="small" /></AppButton>
-                    <AppButton name=""><MoreHorizIcon fontSize="small" /></AppButton>
+                    <AppButton name="Follow" onClick={(e : any) => console.log("followed")}><FavoriteBorderIcon fontSize="small"/></AppButton>
+                    <AppButton name="Share" onClick={(e : any) => console.log("shared")}><SendIcon fontSize="small" /></AppButton>
+                    <AppButton name="" onClick={(e : any) => console.log("more")}><MoreHorizIcon fontSize="small" /></AppButton>
                 </Stack>
             </div>
         </div>

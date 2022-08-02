@@ -1,52 +1,59 @@
 import {getAuth, createUserWithEmailAndPassword} from "firebase/auth"
 import {database} from "../../../utils/config"
-import {doc, setDoc, getDoc} from "firebase/firestore"
+import {USERNAME_EXISTS, PASSWORD_SHORT_ERROR} from "../utils/constants"
+import {doc, setDoc, getDoc, getDocs, query, where, collection} from "firebase/firestore"
 
-const registerUser = (email: string, username: string, password: string) => {
+const registerUser = async (email: string, username: string, password: string) => {
     let userId = "";
 
     const auth = getAuth();
 
-    createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            const user = userCredential.user;
-            userId = user.uid;
-            addUserToDb(userId, username);
-            return true;
-        })
-        .catch((error) => {
-            console.log(error.code + " " + error.message);
-            return false;
-        });
+    return createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                addUserToDb(userCredential.user.uid, username, email);
+            })
 }
 
-const addUserToDb = async (id: string, username: string) => {
-    await setDoc(doc(database, id, username), {
-        followerCount: 0,
-        followers: [],
+export const validatePassword = (password: string) => {
+        if (password.length < 8) {
+            return Promise.reject(PASSWORD_SHORT_ERROR);
+        } else {
+            return Promise.resolve(password);
+        }
+    }
+
+const addUserToDb = async (id: string, username: string, email: string) => {
+    await setDoc(doc(database, "users", id), {
         following: [],
-        followingCount: 0,
         likedTracks: [],
         tracks: [],
-        id: id,
-        username: username
+        username: username,
+        email: email
+    })
+
+    await setDoc(doc(database, "followers", id), {
+        followers: []
     })
 }
 
-export const checkUniqueUsername = (username: string) : boolean => {
-    var userDocRef = doc(database, "users", username);
+// NEXT: cloud function for followers doc
 
-    var existsCheck : boolean = false;
+export const checkAllUsernames = (username: string) => {
+    let uniqueUsername : boolean = false;
 
-    getDoc(userDocRef).then((doc) => {
-        if (doc.exists()) {
-            existsCheck = true;
-        } else {
-            existsCheck = false;
-        }
-    });
+    const usersQuery = query(collection(database, "users"), where("username", "==", username));
 
-    return !existsCheck;
+     return getDocs(usersQuery);
+}
+
+export const checkUniqueUsername = async (username: string) => {
+    const usersQuerySnap = await checkAllUsernames(username);
+
+    if (!usersQuerySnap.empty) {
+        return Promise.reject(USERNAME_EXISTS);
+    } else {
+        return Promise.resolve(username);
+    }
 }
 
 export default registerUser

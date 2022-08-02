@@ -2,7 +2,6 @@ import TextField from "@mui/material/TextField"
 import {NAV_BAR_HEIGHT, BACKGROUND_COLOR, SHADOW} from "../../../../utils/constants"
 import {PAGE_WIDTH} from "../../utils/constants"
 import {CSSProperties} from "react"
-import {styled} from '@mui/system'
 
 export default function styles() {
     return {
@@ -22,17 +21,3 @@ export default function styles() {
     }
 }
 
-export const StyledTextField = styled(TextField)({
-        borderRadius: "0.5em",
-        '.MuiOutlinedInput-root': {
-            borderRadius: "0.5em",
-            backgroundColor: "white",
-            boxShadow: SHADOW
-        },
-        '.MuiOutlinedInput-notchedOutline': {
-            borderColor: BACKGROUND_COLOR
-        },
-        '.MuiFormHelperText-root': {
-            fontSize: "0.9em"
-        }
-});

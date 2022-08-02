@@ -1,16 +1,18 @@
 import ILoginRegisterProps from "./LoginRegisterInterface"
-import styles, {StyledTextField} from "./LoginRegisterStyles"
+import styles from "./LoginRegisterStyles"
+import {getErrorMessage} from "../../../../utils/functions"
 import Grid from "@mui/material/Grid"
 import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
-import TextField from "@mui/material/TextField"
+import InputField from "../InputField/InputField"
 import AppDivider from "../../../../components/AppDivider/AppDivider"
 import AppButton from "../../../../components/AppButton/AppButton"
 import {FADE_IN, ELASTIC_EASE} from "../../../../utils/constants"
 import {useEffect, useRef, useState} from 'react'
 import {gsap} from "gsap"
+import {ERROR_MESSAGES, INVALID_EMAIL, EMPTY_USERNAME, EMPTY_PASSWORD, EMPTY_EMAIL} from "../../utils/constants"
 
-const LoginRegisterView = ({login, usernameFail, passwordFail, usernameValidate, passwordValidate, onSubmit} : ILoginRegisterProps) => {
+const LoginRegisterView = ({login, usernameFail, passwordFail, onSubmit} : ILoginRegisterProps) => {
     const pageDiv = useRef<any>();
     const timeline = useRef<any>();
 
@@ -28,51 +30,77 @@ const LoginRegisterView = ({login, usernameFail, passwordFail, usernameValidate,
                                 )
     }, [])
 
+    // NEXT: refactor into hooks
+
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [email, setEmail] = useState<string>("");
 
-    const [usernameError, setUsernameError] = useState<boolean>(false);
-    const [passwordError, setPasswordError] = useState<boolean>(false);
-    const [emailError, setEmailError] = useState<boolean>(false);
+    const [usernameError, setUsernameError] = useState<string>("");
+    const [passwordError, setPasswordError] = useState<string>("");
+    const [emailError, setEmailError] = useState<string>("");
+
+    const [loading, setLoading] = useState<boolean>(false);
 
     const title = login ? "Login" : "Register";
 
-    const validateAndSubmit = (e: any) => {
+    const validateAndSubmit = async (e: any) => {
+        // NEXT:  input disable register button when clicked
+        // NEXT: register button loading icon when clicked
         e.stopPropagation();
 
-        if (username.length == 0 || password.length == 0) {
-            return
-        }
+        setLoading(true);
 
-        if (login || emailValidate(email)) {
-            if (usernameValidate(username)) {
-                setUsernameError(false);
-                if (passwordValidate(username, password)) {
-                    setPasswordError(false);
-                    onSubmit(email, username, password);
-                } else {
-                    setPasswordError(true);
-                    return
-                }
+        try {
+            checkEmptyFields();
+            emailValidate(email);
+            await onSubmit(email, username, password);
+            const linkToHome = document.createElement('a');
+            linkToHome.href = "/home"
+            linkToHome.click();
+        } catch (error : any) {
+            console.log(error);
+            const errorMsg : string = getErrorMessage(error);
+            console.log(errorMsg);
+            if (errorMsg.toLowerCase().includes("email")) {
+                setEmailError(ERROR_MESSAGES[errorMsg]);
+            } else if (errorMsg.toLowerCase().includes("username")) {
+                setUsernameError(ERROR_MESSAGES[errorMsg]);
+            } else if (errorMsg.toLowerCase().includes("password")) {
+                setPasswordError(ERROR_MESSAGES[errorMsg]);
             } else {
-                setUsernameError(true);
-                return
+
             }
-        } else {
-            setEmailError(true);
-            return
         }
 
+        setLoading(false);
+    }
+
+    const checkEmptyFields = () => {
+        if (!login && email.length == 0) {
+            throw EMPTY_EMAIL
+        }
+        if (username.length == 0) {
+            throw EMPTY_USERNAME
+        }
+        if (password.length == 0) {
+            throw EMPTY_PASSWORD
+        }
     }
 
     const emailValidate = (email: string) => {
-        return /[a-z0-9]+@([a-z0-9]+\.)+[a-z]+/.test(email);
+        // NEXT : implement email validate if exists or nah
+
+        if (!(login) && !(/[a-z0-9]+@([a-z0-9]+\.)+[a-z]+/.test(email))) {
+            throw INVALID_EMAIL;
+        }
     }
 
     const resetError = () => {
-        setUsernameError(false);
-        setPasswordError(false);
+        setEmailError("");
+        setUsernameError("");
+        setPasswordError("");
+        setLoading(false);
     }
 
     return (
@@ -83,6 +111,7 @@ const LoginRegisterView = ({login, usernameFail, passwordFail, usernameValidate,
                 ref={pageDiv}
                 container
                 sx={styles().centerDiv}
+                onClick={resetError}
                 spacing={0}
             >
                 <Grid
@@ -111,34 +140,30 @@ const LoginRegisterView = ({login, usernameFail, passwordFail, usernameValidate,
                     >
                         {
                             login ? null :
-                                <StyledTextField
-                                    InputLabelProps={{shrink: false}}
-                                    error={emailError}
-                                    variant="outlined"
-                                    helperText={emailError ? "Please enter a valid email" : ""}
-                                    label= {email === "" ? "Email" : ""}
-                                    color="success"
-                                    fullWidth
+                                <InputField
+                                    name="Email"
+                                    errorStatus={emailError.length !== 0}
+                                    textValue={email}
                                     onChange={(e : any) => setEmail(e.target.value)}
+                                    errorString={emailError}
+                                    fullWidth={true}
                                 />
                         }
-                            <StyledTextField
-                                InputLabelProps={{shrink: false}}
-                                error={usernameError}
-                                variant="outlined"
-                                helperText={usernameError ? usernameFail : ""}
-                                label= {username === "" ? "Username" : ""}
-                                color="success"
+                            <InputField
+                                name="Username"
+                                errorStatus={usernameError.length !== 0}
+                                textValue={username}
                                 onChange={(e : any) => setUsername(e.target.value)}
+                                errorString={usernameError}
+                                fullWidth={false}
                             />
-                            <StyledTextField
-                                InputLabelProps={{shrink: false}}
-                                error={passwordError}
-                                variant="outlined"
-                                helperText={passwordError ? passwordFail : ""}
-                                label= {password === "" ? "Password" : ""}
-                                color="success"
+                            <InputField
+                                name="Password"
+                                errorStatus={passwordError.length !== 0}
+                                textValue={password}
                                 onChange={(e : any) => setPassword(e.target.value)}
+                                errorString={passwordError}
+                                fullWidth={false}
                             />
                     </Stack>
                 </Grid>
@@ -149,6 +174,7 @@ const LoginRegisterView = ({login, usernameFail, passwordFail, usernameValidate,
                 >
                     <AppButton
                         name={title}
+                        disable={loading}
                         onClick={validateAndSubmit}
                         extraStyle={{minWidth: "20%"}}
                      />
