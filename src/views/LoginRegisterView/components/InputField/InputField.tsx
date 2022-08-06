@@ -1,7 +1,7 @@
 import InputFieldProps from "./InputFieldInterface"
 import StyledTextField from "./InputFieldStyles"
 
-const InputField = ({name, errorStatus, errorString, textValue, onChange, fullWidth} : InputFieldProps) => {
+const InputField = ({name, password, errorStatus, errorString, textValue, onChange, fullWidth} : InputFieldProps) => {
     return (
         <StyledTextField
             InputLabelProps={{shrink: false}}
@@ -12,6 +12,7 @@ const InputField = ({name, errorStatus, errorString, textValue, onChange, fullWi
             color="success"
             fullWidth={fullWidth}
             onChange={onChange}
+            type={password ? "password" : undefined}
         />
     );
 }

@@ -13,7 +13,7 @@ import {useState, useEffect} from 'react'
 
 
 
-const AppMenu = ({menuItems} : AppMenuProps) => {
+const AppMenu = ({name, menuItems} : AppMenuProps) => {
     const [expanded, setExpanded] = useState<boolean>(false);
 
     const expand = () => setExpanded((prev : boolean) => !prev);
@@ -31,7 +31,7 @@ const AppMenu = ({menuItems} : AppMenuProps) => {
                 sx={accordionSummaryStyles()}
             >
                 <Typography variant="h6">
-                    {"Profile"}
+                    {name}
                 </Typography>
             </AccordionSummary>
             <AccordionDetails
@@ -39,11 +39,11 @@ const AppMenu = ({menuItems} : AppMenuProps) => {
             >
                 <Stack>
                     {menuItems.map((ele, i) => {
-                        const {name, link} = ele;
+                        const {name, link, relative} = ele;
                         return (
                             <div style={{minWidth: "100%"}}>
                                 {i == 0 ? null : <AppDivider orientation="horizontal"/>}
-                                <AppMenuItem name={name} link={link} />
+                                <AppMenuItem name={name} link={link} relative={relative}/>
                             </div>
                         );
                     })}

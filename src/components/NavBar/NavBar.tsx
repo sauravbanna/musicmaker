@@ -7,22 +7,29 @@ import SearchBar from "../SearchBar/SearchBar"
 import {Link} from 'react-router-dom'
 import { IMenuItemInfo } from "../AppMenu/AppMenuInterface"
 import {useState, useEffect} from 'react'
-
+import {useLocation} from 'react-router-dom'
+import {useAppSelector} from "../../redux/reduxHooks"
 
 function NavBar(props: any) {
-    const menuItemMap : IMenuItemInfo[] = []
+    const userID = useAppSelector((state) => state.login);
 
-    menuItemMap.push({name: "Your Profile", link: "/profile"})
-    menuItemMap.push({name: "Settings", link: "/settings"})
-    menuItemMap.push({name: "Login", link: "/login"})
-    menuItemMap.push({name: "Register", link: "/register"})
+    let menuItemMap : IMenuItemInfo[] = []
+
+    if (userID == "") {
+        menuItemMap.push({name: "Login", link: "/login"})
+        menuItemMap.push({name: "Register", link: "/register"})
+    } else {
+        menuItemMap.push({name: "Your Profile", link: "/profile"})
+        menuItemMap.push({name: "Settings", link: "/settings"})
+        menuItemMap.push({name: "Log Out", link:"/logout", relative: true})
+    }
 
     const [hoverStyles, setHoverStyles] = useState<any>(homeButtonStyles(false));
 
     return (
         <div style={styles()}>
             <Link
-                to={"/home"}
+                to={"/"}
                 onMouseEnter={() => setHoverStyles(homeButtonStyles(true))}
                 onMouseLeave={() => setHoverStyles(homeButtonStyles(false))}
                 style={hoverStyles}
@@ -35,7 +42,7 @@ function NavBar(props: any) {
             <SearchBar width={"30%"} />
             <AppMenu
                 menuItems={menuItemMap}
-                name="Profile"
+                name={userID}
             />
         </div>
     );

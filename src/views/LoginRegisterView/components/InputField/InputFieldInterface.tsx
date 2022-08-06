@@ -4,5 +4,6 @@ export default interface InputFieldProps {
     textValue: string,
     onChange: (e : any) => void,
     name: string,
-    fullWidth: boolean
+    fullWidth: boolean,
+    password?: boolean
 }

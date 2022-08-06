@@ -7,10 +7,14 @@ import Typography from "@mui/material/Typography"
 import InputField from "../InputField/InputField"
 import AppDivider from "../../../../components/AppDivider/AppDivider"
 import AppButton from "../../../../components/AppButton/AppButton"
+import {useAppDispatch} from "../../../../redux/reduxHooks"
+import {logIn} from "../../redux/LoginReducer"
 import {FADE_IN, ELASTIC_EASE} from "../../../../utils/constants"
 import {useEffect, useRef, useState} from 'react'
+import useInputAndError from "../../hooks/useInputAndError"
 import {gsap} from "gsap"
 import {ERROR_MESSAGES, INVALID_EMAIL, EMPTY_USERNAME, EMPTY_PASSWORD, EMPTY_EMAIL} from "../../utils/constants"
+import {useNavigate} from 'react-router-dom'
 
 const LoginRegisterView = ({login, usernameFail, passwordFail, onSubmit} : ILoginRegisterProps) => {
     const pageDiv = useRef<any>();
@@ -30,23 +34,18 @@ const LoginRegisterView = ({login, usernameFail, passwordFail, onSubmit} : ILogi
                                 )
     }, [])
 
-    // NEXT: refactor into hooks
-
-    const [username, setUsername] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
-    const [email, setEmail] = useState<string>("");
-
-    const [usernameError, setUsernameError] = useState<string>("");
-    const [passwordError, setPasswordError] = useState<string>("");
-    const [emailError, setEmailError] = useState<string>("");
+    const [username, setUsername, usernameError, setUsernameError] = useInputAndError("");
+    const [password, setPassword, passwordError, setPasswordError] = useInputAndError("");
+    const [email, setEmail, emailError, setEmailError] = useInputAndError("");
 
     const [loading, setLoading] = useState<boolean>(false);
 
     const title = login ? "Login" : "Register";
 
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+
     const validateAndSubmit = async (e: any) => {
-        // NEXT:  input disable register button when clicked
-        // NEXT: register button loading icon when clicked
         e.stopPropagation();
 
         setLoading(true);
@@ -54,10 +53,13 @@ const LoginRegisterView = ({login, usernameFail, passwordFail, onSubmit} : ILogi
         try {
             checkEmptyFields();
             emailValidate(email);
-            await onSubmit(email, username, password);
-            const linkToHome = document.createElement('a');
-            linkToHome.href = "/home"
-            linkToHome.click();
+            await onSubmit(email, username, password)
+                .then((userId) => {
+                    setLoading(false);
+                    dispatch(logIn(userId));
+                    navigate("/", {replace: true});
+                })
+
         } catch (error : any) {
             console.log(error);
             const errorMsg : string = getErrorMessage(error);
@@ -71,9 +73,12 @@ const LoginRegisterView = ({login, usernameFail, passwordFail, onSubmit} : ILogi
             } else {
 
             }
+
+            setLoading(false);
+            return
         }
 
-        setLoading(false);
+
     }
 
     const checkEmptyFields = () => {
@@ -89,7 +94,6 @@ const LoginRegisterView = ({login, usernameFail, passwordFail, onSubmit} : ILogi
     }
 
     const emailValidate = (email: string) => {
-        // NEXT : implement email validate if exists or nah
 
         if (!(login) && !(/[a-z0-9]+@([a-z0-9]+\.)+[a-z]+/.test(email))) {
             throw INVALID_EMAIL;
@@ -161,6 +165,7 @@ const LoginRegisterView = ({login, usernameFail, passwordFail, onSubmit} : ILogi
                                 name="Password"
                                 errorStatus={passwordError.length !== 0}
                                 textValue={password}
+                                password={true}
                                 onChange={(e : any) => setPassword(e.target.value)}
                                 errorString={passwordError}
                                 fullWidth={false}

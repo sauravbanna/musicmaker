@@ -1,5 +1,7 @@
 import LoginRegisterView from "../components/LoginRegister/LoginRegisterView"
 import registerUser, {checkUniqueUsername, validatePassword} from "../backend/RegisterAuth"
+import {useAppSelector} from "../../../redux/reduxHooks"
+import {useEffect} from 'react'
 
 const RegisterView = () => {
 
@@ -8,11 +10,7 @@ const RegisterView = () => {
                 .then((username) => {
                     return validatePassword(password)
                         .then((password) => {
-                            return registerUser(email, username, password)
-                                .then(() => {
-                                    console.log("success");
-
-                                })
+                            return registerUser(email, username, password);
                         })
                 })
 

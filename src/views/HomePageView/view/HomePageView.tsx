@@ -5,8 +5,16 @@ import AppDivider from "../../../components/AppDivider/AppDivider"
 import FollowedArtists from "../components/FollowedArtists/FollowedArtists"
 import HomePosts from "../components/HomePosts/HomePosts"
 import LikedSongs from "../components/LikedSongs/LikedSongs"
+import {useAppSelector} from "../../../redux/reduxHooks"
+import {useEffect} from 'react'
 
 const HomePageView = () => {
+    const uid = useAppSelector((state) => state.login);
+
+    useEffect(() => {
+        console.log(uid);
+    }, []);
+
     return (
         <div
             style={

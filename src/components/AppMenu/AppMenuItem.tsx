@@ -4,11 +4,13 @@ import AppDivider from "../AppDivider/AppDivider"
 import Stack from "@mui/material/Stack"
 import Paper from "@mui/material/Paper"
 import Typography from "@mui/material/Typography"
-import {Link} from 'react-router-dom'
+import {Link, useLocation} from 'react-router-dom'
 import {useState} from 'react'
 
 
-const AppMenuItem = ({name, link} : IAppMenuItemProps) => {
+const AppMenuItem = ({name, link, relative} : IAppMenuItemProps) => {
+    const currentPath = useLocation();
+
     const [hover, setHover] = useState<boolean>(false);
 
     const onMouseEnter = () => {
@@ -22,6 +24,7 @@ const AppMenuItem = ({name, link} : IAppMenuItemProps) => {
     return (
         <Link
             to={link}
+            state={relative ? {background: currentPath.pathname} : null}
             style={{textDecoration: "none", color: "black", ...itemStyles(hover)}}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}

@@ -21,10 +21,8 @@ export const loginUser = (username: string, password: string) => {
 
             return signInWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
-                    // NEXT: add to global state
                     console.log(userCredential.user.uid);
+                    return Promise.resolve(userCredential.user.uid);
                 })
         })
 }
-
-// NEXT: implement login system

@@ -10,7 +10,7 @@ const registerUser = async (email: string, username: string, password: string) =
 
     return createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                addUserToDb(userCredential.user.uid, username, email);
+                return addUserToDb(userCredential.user.uid, username, email);
             })
 }
 
@@ -22,21 +22,22 @@ export const validatePassword = (password: string) => {
         }
     }
 
-const addUserToDb = async (id: string, username: string, email: string) => {
-    await setDoc(doc(database, "users", id), {
+const addUserToDb = (id: string, username: string, email: string) => {
+    return setDoc(doc(database, "users", id), {
         following: [],
         likedTracks: [],
         tracks: [],
         username: username,
         email: email
-    })
-
-    await setDoc(doc(database, "followers", id), {
-        followers: []
+    }).then(() => {
+        return setDoc(doc(database, "followers", id), {
+                followers: []
+            }).then(() => {
+                console.log("written to users and followers");
+                return Promise.resolve(id);
+            })
     })
 }
-
-// NEXT: cloud function for followers doc
 
 export const checkAllUsernames = (username: string) => {
     let uniqueUsername : boolean = false;

@@ -10,7 +10,7 @@ const loginSlice = createSlice({
     reducers: {
         logIn: {
             reducer: (state: string, {payload}: PayloadAction<ILoginState>) => {
-                state = payload.state;
+                return payload.state;
             },
             prepare: (userId: string) => {
                 return {
@@ -22,3 +22,7 @@ const loginSlice = createSlice({
         },
     },
 })
+
+export const {logIn} = loginSlice.actions;
+
+export default loginSlice.reducer;
