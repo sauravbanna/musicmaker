@@ -56,7 +56,7 @@ const LoginRegisterView = ({login, usernameFail, passwordFail, onSubmit} : ILogi
             await onSubmit(email, username, password)
                 .then((userId) => {
                     setLoading(false);
-                    dispatch(logIn(userId));
+                    dispatch(logIn(userId, username));
                     navigate("/", {replace: true});
                 })
 

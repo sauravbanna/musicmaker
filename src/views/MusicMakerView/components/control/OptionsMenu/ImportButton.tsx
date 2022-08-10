@@ -2,7 +2,7 @@ import {useAppDispatch} from "../../../../../redux/reduxHooks"
 import {useRef} from 'react'
 import {importAction} from "../../../redux/notesReducer"
 import AppButton from "../../../../../components/AppButton/AppButton"
-
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 
 function ImportButton() {
     const uploadFile = useRef<HTMLInputElement | null>(null);
@@ -29,6 +29,7 @@ function ImportButton() {
             onClick={onClick}
             name="Import"
         >
+            <FileUploadIcon />
             <input type='file' ref={uploadFile} id='notesUpload' onChange={onChangeFile} accept='.json' style={{display: "none"}}/>
         </AppButton>
     );

@@ -1,40 +1,41 @@
-import LogOutDialogBox from "../components/LogOutDialogBox"
+import Grid from "@mui/material/Grid"
+import Typography from "@mui/material/Typography"
+import DialogBox from "../../../components/DialogBox/DialogBox"
 import ILogOutDialogProps from "./LogOutDialogInterface"
-import useFadeInComponent from "../../../hooks/useFadeInComponent"
+import DialogBackground from "../../../components/DialogBackground/DialogBackground"
+import logOutAuth from '../backend/LogOutAuth'
+import {logIn} from "../../LoginRegisterView/redux/LoginReducer"
+import {useNavigate} from 'react-router-dom'
+import {useAppDispatch} from "../../../redux/reduxHooks"
 
 const LogOutDialog = ({prevLink} : ILogOutDialogProps) => {
-    const fadeDiv = useFadeInComponent(0);
+    const dispatch = useAppDispatch();
+
+    const logOut = async (e : any) => {
+        try {
+            await logOutAuth();
+            dispatch(logIn("", ""));
+        } catch (err : any) {
+
+        }
+
+    }
 
     return (
-        <div
-            style=
-                    {
-                        {
-                            position: "absolute",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            minWidth: "100%",
-                            minHeight: "100%",
-                            zIndex: 9999
-                        }
-                    }
-        >
-            <div
-                ref={fadeDiv}
-                style=
-                        {
-                            {
-                                position: "absolute",
-                                zIndex: -1,
-                                backgroundColor: "rgba(0, 0, 0, 0.6)",
-                                minHeight: "100%",
-                                minWidth: "100%"
-                            }
-                        }
-            />
-            <LogOutDialogBox prevLink={prevLink}/>
-         </div>
+        <DialogBackground>
+            <DialogBox
+                buttonName="Log Out"
+                onClick={logOut}
+                prevLink={prevLink}
+                nextLink="/"
+            >
+                <Grid item xs={12}>
+                    <Typography variant="h5" align="center">
+                        {"Are you sure you want to log out?"}
+                    </Typography>
+                </Grid>
+            </DialogBox>
+        </DialogBackground>
     );
 }
 

@@ -5,6 +5,7 @@ import {togglePlay} from "../../../redux/PlayButtonReducer"
 import {shallowEqual} from 'react-redux'
 import {playSelector} from "../../../utils/MusicMakerSelectors"
 import AppButton from "../../../../../components/AppButton/AppButton"
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
 function PlayButton() {
     const dispatch = useAppDispatch();
@@ -17,7 +18,12 @@ function PlayButton() {
     }
 
     return (
-        <AppButton name={play ? "Pause" : "Play"} onClick={onClick} />
+        <AppButton
+            name={play ? "Pause" : "Play"}
+            onClick={onClick}
+        >
+            <PlayArrowIcon />
+        </AppButton>
     );
 }
 

@@ -25,7 +25,13 @@ const AppMenuItem = ({name, link, relative} : IAppMenuItemProps) => {
         <Link
             to={link}
             state={relative ? {background: currentPath.pathname} : null}
-            style={{textDecoration: "none", color: "black", ...itemStyles(hover)}}
+            style={
+                {
+                    textDecoration: "none",
+                    color: "black",
+                    ...itemStyles(hover)
+                }
+            }
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >

@@ -1,12 +1,12 @@
 import {MusicDisplay} from '../components/ui/MusicDisplay/MusicDisplay'
 import {InstrumentSelect} from "../components/control/InstrumentSelect/InstrumentSelect"
 import OptionsMenu from "../components/control/OptionsMenu/OptionsMenu"
+import UploadButton from "../components/UploadButton/UploadButton"
 import {INSTRUMENTS as instruments} from "../utils/constants"
 import {Button} from '@mui/material'
 import {useState, useRef, useEffect} from 'react'
 import { AudioContextProvider } from "../../../utils/context"
 import { FADE_IN } from "../../../utils/constants"
-import PlayButton from "../components/control/PlayButton/PlayButton"
 import styles, {musicStyles} from "./MusicMakerStyle"
 import {useAppSelector} from "../../../redux/reduxHooks"
 import {gsap} from 'gsap'
@@ -51,7 +51,7 @@ function MusicMakerView() {
                     &nbsp;
                 <OptionsMenu />
         </div>
-        <PlayButton />
+        <UploadButton />
     </div>
   );
 }

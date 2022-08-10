@@ -2,12 +2,15 @@ import {APP_COLOR} from "../../../utils/constants"
 
 export default function styles() {
     return {
-        height: "100vh",
+        position: "absolute" as "absolute",
+        top: "3%",
+        left: "50%",
+        right: "50%",
+        height: "95vh",
         display: "flex",
         justifyContent: "space-evenly",
         alignItems: "center",
-        flexDirection: "column" as 'column',
-        backgroundColor: APP_COLOR
+        flexDirection: "column" as 'column'
     }
 }
 

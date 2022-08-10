@@ -6,7 +6,7 @@ export function menuStyles() {
         minWidth: WIDTH,
         width: WIDTH,
         display: "flex",
-        justifyContent: "flex-end",
+        justifyContent: "space-between",
         position: "relative" as "relative"
     }
 }

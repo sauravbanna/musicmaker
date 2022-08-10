@@ -1,21 +1,28 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface ILoginState {
-    state: string
+    username: string,
+    userId: string
 }
+
+const defaultState : ILoginState = {username: "", userId: ""}
 
 const loginSlice = createSlice({
     name: "loggedIn",
-    initialState: "",
+    initialState: defaultState,
     reducers: {
         logIn: {
-            reducer: (state: string, {payload}: PayloadAction<ILoginState>) => {
-                return payload.state;
+            reducer: (state: ILoginState, {payload}: PayloadAction<any>) => {
+                return {
+                    username: payload.username,
+                    userId: payload.userId
+                };
             },
-            prepare: (userId: string) => {
+            prepare: (userId: string, username: string) => {
                 return {
                     payload: {
-                        state: userId
+                        username,
+                        userId
                     }
                 }
             },

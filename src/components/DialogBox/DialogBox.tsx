@@ -2,18 +2,16 @@ import Paper from "@mui/material/Paper"
 import Grid from "@mui/material/Grid"
 import Typography from "@mui/material/Typography"
 import CloseIcon from '@mui/icons-material/Close';
-import AppButton from "../../../components/AppButton/AppButton"
-import AppIconButton from "../../../components/AppIconButton/AppIconButton"
-import {APP_COLOR, SHADOW, FADE_IN, ELASTIC_EASE} from "../../../utils/constants"
-import ILogOutDialogProps from "../view/LogOutDialogInterface"
-import {useAppDispatch} from "../../../redux/reduxHooks"
-import {logIn} from "../../LoginRegisterView/redux/LoginReducer"
+import AppButton from "../AppButton/AppButton"
+import AppIconButton from "../AppIconButton/AppIconButton"
+import IDialogBoxProps from "./DialogBoxInterface"
+import {APP_COLOR, SHADOW, FADE_IN} from "../../utils/constants"
+import {useNavigate} from 'react-router-dom'
 import {useState, useEffect, useRef} from 'react'
 import {gsap} from 'gsap'
-import {useNavigate} from 'react-router-dom'
-import logOutAuth from '../backend/LogOutAuth'
 
-const LogOutDialogBox = ({prevLink} : ILogOutDialogProps) => {
+
+const DialogBox = ({buttonName, onClick, prevLink, nextLink, children}: IDialogBoxProps) => {
     const dialogRef = useRef<any>();
     const timeline = useRef<any>();
 
@@ -33,22 +31,20 @@ const LogOutDialogBox = ({prevLink} : ILogOutDialogProps) => {
                             )
     }, []);
 
-    const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
     const dialogClose = () => {
-        navigate(prevLink, {replace: true});
-    }
-
-    const logOut = async (e : any) => {
         try {
-            await logOutAuth();
-            dispatch(logIn(""));
+            navigate(prevLink, {replace: true});
+        } catch(err : any) {
             navigate("/", {replace: true});
-        } catch (err : any) {
-
         }
 
+    }
+
+    const dialogSubmit = (e: any) => {
+        onClick(e);
+        navigate(nextLink, {replace: true});
     }
 
     const [close, setClose] = useState<boolean>(false);
@@ -90,17 +86,13 @@ const LogOutDialogBox = ({prevLink} : ILogOutDialogProps) => {
                         onMouseUp={() => setClose(false)}
                     />
                 </Grid>
-                <Grid item xs={12}>
-                    <Typography variant="h5" align="center">
-                        {"Are you sure you want to log out?"}
-                    </Typography>
-                </Grid>
+                {children}
                 <Grid item>
-                    <AppButton name="Log Out" onClick={logOut} />
+                    <AppButton name={buttonName} onClick={dialogSubmit} />
                 </Grid>
             </Grid>
         </Paper>
     );
 }
 
-export default LogOutDialogBox
+export default DialogBox

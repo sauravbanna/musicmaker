@@ -9,7 +9,7 @@ import {useState} from 'react'
 const FollowedArtists = () => {
     const array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
 
-    const [scrollDiv, onClickLeft, onClickRight, leftButtonActive, rightButtonActive] = useScrollComponent(2);
+    const [scrollDiv, containerDiv, onClickLeft, onClickRight, leftButtonActive, rightButtonActive] = useScrollComponent(0);
 
     const [visible, setVisible] = useState<boolean>(false);
 
@@ -23,6 +23,7 @@ const FollowedArtists = () => {
                 {"Following"}
             </Typography>
             <div
+                ref={containerDiv}
                 style={
                     {
                         display: "flex",

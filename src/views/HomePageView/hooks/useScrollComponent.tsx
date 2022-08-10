@@ -1,9 +1,13 @@
 import {useRef, useEffect, useState} from 'react'
 import {gsap} from 'gsap'
 
-function useScrollComponent(initial: number) : [any, () => void, () => void, boolean, boolean] {
+function useScrollComponent(initial: number) : [any, any, () => void, () => void, boolean, boolean] {
     const scrollDiv = useRef<any>();
+    const containerDiv = useRef<any>();
     const timeline = useRef<any>();
+
+    const [scrollDivWidth, setScrollDivWidth] = useState<number>(0);
+    const [containerWidth, setContainerWidth] = useState<number>(0);
 
     const [leftScroll, setLeftScroll] = useState<number>(initial);
     const [prevLeftScroll, setPrevLeftScroll] = useState<number>(initial);
@@ -12,24 +16,45 @@ function useScrollComponent(initial: number) : [any, () => void, () => void, boo
     const [rightButtonActive, setRightButtonActive] = useState<boolean>(true);
 
     useEffect(() => {
+        setScrollDivWidth(scrollDiv.current.clientWidth);
+        setContainerWidth(containerDiv.current.clientWidth);
+    }, []);
+
+    useEffect(() => {
+        if (containerWidth != 0) {
+            checkButtons();
+        }
+    }, [containerWidth])
+
+    const VELOCITY = 600;
+
+    useEffect(() => {
         timeline.current = gsap.timeline({repeat: 0}).fromTo(
             scrollDiv.current,
-            {left: prevLeftScroll + "%"},
+            {left: prevLeftScroll + "px"},
             {
-                left: leftScroll + "%",
-                duration: 2,
+                left: leftScroll + "px",
+                duration: Math.abs(leftScroll - prevLeftScroll) / VELOCITY,
                 repeat: 0,
                 ease: "none"
             }
         );
-
-        setLeftButtonActive(leftScroll + 100 <= initial);
+        checkButtons();
     }, [leftScroll])
+
+    const checkButtons = () => {
+        setLeftButtonActive(leftScroll < initial);
+        setRightButtonActive(leftScroll - containerWidth > -1 * scrollDivWidth);
+    }
 
     const onClickLeft = () => {
         if (leftButtonActive) {
             setPrevLeftScroll(leftScroll);
-            setLeftScroll((prev: number) => prev + 100);
+            if (leftScroll + containerWidth > initial) {
+                setLeftScroll(initial);
+            } else {
+                setLeftScroll((prev: number) => prev + containerWidth);
+            }
         }
 
     }
@@ -37,12 +62,16 @@ function useScrollComponent(initial: number) : [any, () => void, () => void, boo
     const onClickRight = () => {
         if (rightButtonActive) {
             setPrevLeftScroll(leftScroll);
-            setLeftScroll((prev: number) => prev - 100);
+            if (leftScroll - 2 * containerWidth < -1 * scrollDivWidth) {
+                setLeftScroll(-1 * (scrollDivWidth - containerWidth));
+            } else {
+                setLeftScroll((prev: number) => prev - containerWidth);
+            }
         }
 
     }
 
-    return [scrollDiv, onClickLeft, onClickRight, leftButtonActive, rightButtonActive];
+    return [scrollDiv, containerDiv, onClickLeft, onClickRight, leftButtonActive, rightButtonActive];
 }
 
 export default useScrollComponent

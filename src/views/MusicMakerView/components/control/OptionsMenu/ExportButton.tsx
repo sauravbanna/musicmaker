@@ -3,6 +3,7 @@ import {useEffect} from 'react'
 import {useAppSelector} from '../../../../../redux/reduxHooks'
 import {allNotesSelector} from "../../../utils/MusicMakerSelectors"
 import AppButton from "../../../../../components/AppButton/AppButton"
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 function ExportButton() {
     const allNotes = useAppSelector(allNotesSelector, shallowEqual);
@@ -21,7 +22,9 @@ function ExportButton() {
     }
 
     return (
-        <AppButton name="Export" onClick={onClick} />
+        <AppButton name="Export" onClick={onClick}>
+            <FileDownloadIcon />
+        </AppButton>
     );
 }
 

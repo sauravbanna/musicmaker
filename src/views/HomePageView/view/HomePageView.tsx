@@ -9,11 +9,6 @@ import {useAppSelector} from "../../../redux/reduxHooks"
 import {useEffect} from 'react'
 
 const HomePageView = () => {
-    const uid = useAppSelector((state) => state.login);
-
-    useEffect(() => {
-        console.log(uid);
-    }, []);
 
     return (
         <div

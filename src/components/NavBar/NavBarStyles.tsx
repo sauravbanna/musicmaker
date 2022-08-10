@@ -16,7 +16,7 @@ export default function styles() {
 }
 
 
-export function homeButtonStyles(hover: boolean) {
+export function elementStyles(hover: boolean) {
     return {
         paddingLeft: "1em",
         paddingRight: "1em",
