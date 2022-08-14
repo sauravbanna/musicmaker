@@ -1,5 +1,7 @@
 # Music Maker
 
+[Link to Website](https://musicmaker-9c83c.web.app/)
+
 A simple way to make a song using a variety of instruments.
 
 ## Motivation
