@@ -2,7 +2,7 @@ import Paper from "@mui/material/Paper"
 import Grid from "@mui/material/Grid"
 import Typography from "@mui/material/Typography"
 import CloseIcon from '@mui/icons-material/Close';
-import AppButton from "../AppButton/AppButton"
+import SubmitButton from "../SubmitButton/SubmitButton"
 import AppIconButton from "../AppIconButton/AppIconButton"
 import IDialogBoxProps from "./DialogBoxInterface"
 import {APP_COLOR, SHADOW, FADE_IN} from "../../utils/constants"
@@ -11,7 +11,7 @@ import {useState, useEffect, useRef} from 'react'
 import {gsap} from 'gsap'
 
 
-const DialogBox = ({buttonName, onClick, prevLink, nextLink, children}: IDialogBoxProps) => {
+const DialogBox = ({buttonName, onClick, onBackgroundClick, prevLink, children, style}: IDialogBoxProps) => {
     const dialogRef = useRef<any>();
     const timeline = useRef<any>();
 
@@ -42,16 +42,12 @@ const DialogBox = ({buttonName, onClick, prevLink, nextLink, children}: IDialogB
 
     }
 
-    const dialogSubmit = (e: any) => {
-        onClick(e);
-        navigate(nextLink, {replace: true});
-    }
-
     const [close, setClose] = useState<boolean>(false);
 
     return (
         <Paper
             ref={dialogRef}
+            onClick={onBackgroundClick}
             sx=
                 {
                     {
@@ -61,6 +57,7 @@ const DialogBox = ({buttonName, onClick, prevLink, nextLink, children}: IDialogB
                         paddingLeft: "1em",
                         borderRadius: "0.5em",
                         backgroundColor: APP_COLOR,
+                        ...style
                     }
                 }
         >
@@ -87,8 +84,17 @@ const DialogBox = ({buttonName, onClick, prevLink, nextLink, children}: IDialogB
                     />
                 </Grid>
                 {children}
-                <Grid item>
-                    <AppButton name={buttonName} onClick={dialogSubmit} />
+                <Grid
+                    item
+                    xs={12}
+                    sx={
+                        {
+                            justifyContent: "center",
+                            display: "flex"
+                        }
+                    }
+                >
+                    <SubmitButton name={buttonName} onClick={onClick}/>
                 </Grid>
             </Grid>
         </Paper>

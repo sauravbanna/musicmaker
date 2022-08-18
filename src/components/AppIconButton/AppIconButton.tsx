@@ -3,7 +3,7 @@ import iconStyles from "./AppIconButtonStyle"
 import IAppIconButtonProps from "./AppIconButtonInterface"
 import {useState} from 'react'
 
-const AppIconButton = ({onClick, icon, clickIcon, clicked, onMouseDown, onMouseUp} : IAppIconButtonProps) => {
+const AppIconButton = ({onClick, icon, clickIcon, clicked, onMouseDown, onMouseUp, children} : IAppIconButtonProps) => {
     const [hover, setHover] = useState<boolean>(false);
 
     return (
@@ -20,6 +20,7 @@ const AppIconButton = ({onClick, icon, clickIcon, clicked, onMouseDown, onMouseU
                 onMouseLeave={() => setHover(false)}
             >
                 {clicked ? clickIcon : icon}
+                {children}
             </div>
         </IconButton>
     );

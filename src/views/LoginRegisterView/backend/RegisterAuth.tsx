@@ -1,7 +1,7 @@
 import {getAuth, createUserWithEmailAndPassword} from "firebase/auth"
 import {database} from "../../../utils/config"
 import {USERNAME_EXISTS, PASSWORD_SHORT_ERROR} from "../utils/constants"
-import {doc, setDoc, getDoc, getDocs, query, where, collection} from "firebase/firestore"
+import {doc, setDoc, getDocs, query, where, collection} from "firebase/firestore"
 
 const registerUser = async (email: string, username: string, password: string) => {
     let userId = "";
@@ -24,14 +24,14 @@ export const validatePassword = (password: string) => {
 
 const addUserToDb = (id: string, username: string, email: string) => {
     return setDoc(doc(database, "users", id), {
-        following: [],
-        likedTracks: [],
-        tracks: [],
+        following: {},
+        likedTracks: {},
+        tracks: {},
         username: username,
         email: email
     }).then(() => {
         return setDoc(doc(database, "followers", id), {
-                followers: []
+                followers: {}
             }).then(() => {
                 console.log("written to users and followers");
                 return Promise.resolve(id);

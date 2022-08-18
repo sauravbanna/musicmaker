@@ -1,12 +1,12 @@
 import Button from "@mui/material/Button"
-import {IAppButtonProps} from "./AppButtonInterface"
+import IAppButtonProps from "./AppButtonInterface"
 import styles from "./AppButtonStyles"
 import {useState, useEffect} from 'react'
 import Typography from "@mui/material/Typography"
 import Stack from "@mui/material/Stack"
 import PendingIcon from '@mui/icons-material/Pending';
 
-function AppButton({name, onClick, children, extraStyles, disableRipple, disableHover, extraStyle, disable} : IAppButtonProps) {
+function AppButton({name, onClick, children, extraStyles, disableRipple, disableHover, disable} : IAppButtonProps) {
     const [style, setStyle] = useState<any>(styles(false));
 
     if (disable) {
@@ -38,7 +38,7 @@ function AppButton({name, onClick, children, extraStyles, disableRipple, disable
 
     return (
         <Button
-            style={{...style, ...extraStyle}}
+            style={{...style}}
             onMouseEnter={onStyleMouseEnter}
             onMouseLeave={onStyleMouseLeave}
             onClick={disable ? undefined : onClick}

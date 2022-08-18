@@ -4,5 +4,7 @@ export default interface IAppIconButtonProps {
     clickIcon: any,
     clicked: boolean,
     onMouseDown?: () => void,
-    onMouseUp?: () => void
+    onMouseUp?: () => void,
+    children?: any,
+    styled?: boolean
 }

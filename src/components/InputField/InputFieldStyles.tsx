@@ -1,6 +1,6 @@
 import TextField from "@mui/material/TextField"
 import {styled} from '@mui/system'
-import {BACKGROUND_COLOR, SHADOW} from "../../../../utils/constants"
+import {BACKGROUND_COLOR, SHADOW} from "../../utils/constants"
 
 
 const StyledTextField = styled(TextField)({

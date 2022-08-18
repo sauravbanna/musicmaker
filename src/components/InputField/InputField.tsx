@@ -1,7 +1,9 @@
 import InputFieldProps from "./InputFieldInterface"
 import StyledTextField from "./InputFieldStyles"
 
-const InputField = ({name, password, errorStatus, errorString, textValue, onChange, fullWidth} : InputFieldProps) => {
+const InputField = ({name, password, errorStatus, errorString, textValue, onChange, fullWidth, multiline} : InputFieldProps) => {
+    const inputProps = multiline ? {maxLength: 250} : undefined
+
     return (
         <StyledTextField
             InputLabelProps={{shrink: false}}
@@ -13,6 +15,8 @@ const InputField = ({name, password, errorStatus, errorString, textValue, onChan
             fullWidth={fullWidth}
             onChange={onChange}
             type={password ? "password" : undefined}
+            multiline={multiline}
+            inputProps={inputProps}
         />
     );
 }

@@ -1,7 +1,8 @@
 export default interface IDialogBoxProps {
     buttonName: string,
-    onClick: (e : any) => void,
+    onClick: (e : any) => Promise<string>,
+    onBackgroundClick?: () => void
     prevLink: string,
-    nextLink: string,
-    children: any
+    children: any,
+    style?: any
 }

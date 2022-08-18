@@ -45,11 +45,11 @@ function MusicMakerView() {
     <div style={styles()}>
         <div style={musicStyles()} ref={pageDiv}>
             <InstrumentSelect onClick={setInstrument} setLoadedPanels={setLoadedPanels}/>
-                    <AudioContextProvider value={audioContext}>
-                        <MusicDisplay loadedPanels={loadedPanels} activeInstrument={instruments[instrument]} />
-                    </AudioContextProvider>
-                    &nbsp;
-                <OptionsMenu />
+            <AudioContextProvider value={audioContext}>
+                <MusicDisplay loadedPanels={loadedPanels} activeInstrument={instruments[instrument]} />
+            </AudioContextProvider>
+            &nbsp;
+            <OptionsMenu />
         </div>
         <UploadButton />
     </div>

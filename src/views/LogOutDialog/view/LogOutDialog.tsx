@@ -7,18 +7,22 @@ import logOutAuth from '../backend/LogOutAuth'
 import {logIn} from "../../LoginRegisterView/redux/LoginReducer"
 import {useNavigate} from 'react-router-dom'
 import {useAppDispatch} from "../../../redux/reduxHooks"
+import {useState} from 'react'
 
 const LogOutDialog = ({prevLink} : ILogOutDialogProps) => {
+
     const dispatch = useAppDispatch();
 
     const logOut = async (e : any) => {
+
         try {
             await logOutAuth();
             dispatch(logIn("", ""));
         } catch (err : any) {
-
+            return Promise.reject();
         }
 
+        return Promise.resolve('/');
     }
 
     return (
@@ -27,7 +31,6 @@ const LogOutDialog = ({prevLink} : ILogOutDialogProps) => {
                 buttonName="Log Out"
                 onClick={logOut}
                 prevLink={prevLink}
-                nextLink="/"
             >
                 <Grid item xs={12}>
                     <Typography variant="h5" align="center">

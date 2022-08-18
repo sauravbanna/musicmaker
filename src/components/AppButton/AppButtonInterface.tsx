@@ -1,10 +1,9 @@
-export interface IAppButtonProps {
+export default interface IAppButtonProps {
     name: string,
     onClick: (event: any) => void,
     children?: any,
     extraStyles?: any,
     disableRipple?: boolean,
-    disableHover?: boolean,
-    extraStyle?: any,
+    disableHover?: boolean
     disable?: boolean
 }

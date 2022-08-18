@@ -4,14 +4,14 @@ import {getErrorMessage} from "../../../../utils/functions"
 import Grid from "@mui/material/Grid"
 import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
-import InputField from "../InputField/InputField"
+import InputField from "../../../../components/InputField/InputField"
 import AppDivider from "../../../../components/AppDivider/AppDivider"
-import AppButton from "../../../../components/AppButton/AppButton"
+import SubmitButton from "../../../../components/SubmitButton/SubmitButton"
 import {useAppDispatch} from "../../../../redux/reduxHooks"
 import {logIn} from "../../redux/LoginReducer"
 import {FADE_IN, ELASTIC_EASE} from "../../../../utils/constants"
 import {useEffect, useRef, useState} from 'react'
-import useInputAndError from "../../hooks/useInputAndError"
+import useInputAndError from "../../../../hooks/useInputAndError"
 import {gsap} from "gsap"
 import {ERROR_MESSAGES, INVALID_EMAIL, EMPTY_USERNAME, EMPTY_PASSWORD, EMPTY_EMAIL} from "../../utils/constants"
 import {useNavigate} from 'react-router-dom'
@@ -38,26 +38,21 @@ const LoginRegisterView = ({login, usernameFail, passwordFail, onSubmit} : ILogi
     const [password, setPassword, passwordError, setPasswordError] = useInputAndError("");
     const [email, setEmail, emailError, setEmailError] = useInputAndError("");
 
-    const [loading, setLoading] = useState<boolean>(false);
-
     const title = login ? "Login" : "Register";
 
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
-    const validateAndSubmit = async (e: any) => {
-        e.stopPropagation();
+    const [userMessage, setUserMessage] = useState("aaaaaaaaaaaaaaaa");
 
-        setLoading(true);
+    const validateAndSubmit = async (e: any) => {
 
         try {
             checkEmptyFields();
             emailValidate(email);
             await onSubmit(email, username, password)
                 .then((userId) => {
-                    setLoading(false);
                     dispatch(logIn(userId, username));
-                    navigate("/", {replace: true});
                 })
 
         } catch (error : any) {
@@ -71,13 +66,13 @@ const LoginRegisterView = ({login, usernameFail, passwordFail, onSubmit} : ILogi
             } else if (errorMsg.toLowerCase().includes("password")) {
                 setPasswordError(ERROR_MESSAGES[errorMsg]);
             } else {
-
+                setUserMessage("Error, please try again!");
             }
-
-            setLoading(false);
-            return
+            return Promise.reject();
         }
 
+        setUserMessage("Redirecting you to home page...");
+        return Promise.resolve("/");
 
     }
 
@@ -104,7 +99,6 @@ const LoginRegisterView = ({login, usernameFail, passwordFail, onSubmit} : ILogi
         setEmailError("");
         setUsernameError("");
         setPasswordError("");
-        setLoading(false);
     }
 
     return (
@@ -177,12 +171,24 @@ const LoginRegisterView = ({login, usernameFail, passwordFail, onSubmit} : ILogi
                     xs={12}
                     sx={{justifyContent: "center", display: "flex", alignItems: "center"}}
                 >
-                    <AppButton
-                        name={title}
-                        disable={loading}
-                        onClick={validateAndSubmit}
-                        extraStyle={{minWidth: "20%"}}
-                     />
+                    <div
+                        style={
+                            {
+                                display: "flex",
+                                flexDirection: "column"
+                            }
+                        }
+                    >
+                        <Typography variant="subtitle1">
+                            {userMessage}
+                        </Typography>
+                        &nbsp;
+                        <SubmitButton
+                            name={title}
+                            onClick={validateAndSubmit}
+                            extraStyles={{minWidth: "20%"}}
+                         />
+                     </div>
                 </Grid>
                 <Grid item xs={12}>
                     &nbsp;
