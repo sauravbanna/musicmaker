@@ -11,7 +11,7 @@ import {useState, useEffect, useRef} from 'react'
 import {gsap} from 'gsap'
 
 
-const DialogBox = ({buttonName, onClick, onBackgroundClick, prevLink, children, style}: IDialogBoxProps) => {
+const DialogBox = ({buttonName, onClick, onBackgroundClick, prevLink, children, style, successMessage, failMessage}: IDialogBoxProps) => {
     const dialogRef = useRef<any>();
     const timeline = useRef<any>();
 
@@ -40,6 +40,20 @@ const DialogBox = ({buttonName, onClick, onBackgroundClick, prevLink, children, 
             navigate("/", {replace: true});
         }
 
+    }
+
+    const [userMessage, setUserMessage] = useState<string>("");
+
+    const dialogSubmit = (e: any) => {
+        return onClick(e)
+                .then((nextLink: string) => {
+                    setUserMessage(successMessage);
+                    return Promise.resolve(nextLink);
+                })
+                .catch(() => {
+                    setUserMessage(failMessage);
+                    return Promise.reject();
+                })
     }
 
     const [close, setClose] = useState<boolean>(false);
@@ -90,11 +104,17 @@ const DialogBox = ({buttonName, onClick, onBackgroundClick, prevLink, children, 
                     sx={
                         {
                             justifyContent: "center",
-                            display: "flex"
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center"
                         }
                     }
                 >
-                    <SubmitButton name={buttonName} onClick={onClick}/>
+                    <Typography variant="subtitle1">
+                        {userMessage}
+                    </Typography>
+                    &nbsp;
+                    <SubmitButton name={buttonName} onClick={dialogSubmit}/>
                 </Grid>
             </Grid>
         </Paper>

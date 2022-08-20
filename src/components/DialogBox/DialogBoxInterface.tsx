@@ -4,5 +4,7 @@ export default interface IDialogBoxProps {
     onBackgroundClick?: () => void
     prevLink: string,
     children: any,
-    style?: any
+    style?: any,
+    successMessage: string,
+    failMessage: string
 }

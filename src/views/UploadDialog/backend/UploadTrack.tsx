@@ -1,9 +1,3 @@
-// create a doc with random id
-// put song info into that doc
-// create new doc in notes collection with same id
-// create new doc in feedback collection with same id
-// put notes from global state into that doc
-
 import {database, storage} from "../../../utils/config"
 import {doc, setDoc, collection, serverTimestamp} from "firebase/firestore"
 import {ref, uploadBytes, getDownloadURL} from "firebase/storage"

@@ -31,6 +31,8 @@ const LogOutDialog = ({prevLink} : ILogOutDialogProps) => {
                 buttonName="Log Out"
                 onClick={logOut}
                 prevLink={prevLink}
+                successMessage="Logged you out successfully! Redirecting to Home Page..."
+                failMessage="Failed to log out, please try again!"
             >
                 <Grid item xs={12}>
                     <Typography variant="h5" align="center">

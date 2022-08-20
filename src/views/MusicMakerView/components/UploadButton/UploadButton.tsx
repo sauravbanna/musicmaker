@@ -1,32 +1,31 @@
 import AppButton from "../../../../components/AppButton/AppButton"
-import {Link, useLocation} from "react-router-dom"
+import {useLocation, useNavigate} from "react-router-dom"
+import {useAppSelector} from "../../../../redux/reduxHooks"
 
 const UploadButton = () => {
     const currentPath = useLocation();
+    const navigate = useNavigate();
 
-    console.log(currentPath.pathname);
+    const currentUser = useAppSelector((state) => state.login);
+
+    const showLogInWarning = () => {
+        if (checkCurrentUserNull()) {
+            console.log("not logged in");
+        } else {
+            navigate("/upload", {state: {background: currentPath.pathname}});
+        }
+    }
+
+    const checkCurrentUserNull = () => {
+        return currentUser.username == "" && currentUser.userId == ""
+    }
 
     return (
-        <Link
-            to="/upload"
-            state={
-                {
-                    background: currentPath.pathname
-                }
-            }
-            style={
-                {
-                    textDecoration: "none"
-                }
-            }
+        <AppButton
+            name="Upload"
+            onClick={showLogInWarning}
         >
-            <AppButton
-                name="Upload"
-                onClick={() => console.log("clicked")}
-            >
-
-            </AppButton>
-        </Link>
+        </AppButton>
     );
 }
 

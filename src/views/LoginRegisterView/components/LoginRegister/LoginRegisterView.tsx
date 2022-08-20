@@ -43,7 +43,7 @@ const LoginRegisterView = ({login, usernameFail, passwordFail, onSubmit} : ILogi
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
-    const [userMessage, setUserMessage] = useState("aaaaaaaaaaaaaaaa");
+    const [userMessage, setUserMessage] = useState("");
 
     const validateAndSubmit = async (e: any) => {
 
@@ -175,7 +175,8 @@ const LoginRegisterView = ({login, usernameFail, passwordFail, onSubmit} : ILogi
                         style={
                             {
                                 display: "flex",
-                                flexDirection: "column"
+                                flexDirection: "column",
+                                alignItems: "center"
                             }
                         }
                     >

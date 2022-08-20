@@ -5,12 +5,14 @@ import UploadDialogForm from "../components/UploadDialogForm/UploadDialogForm"
 import {useInputAndErrorMap} from "../../../hooks/useInputAndError"
 import {getErrorMessage} from "../../../utils/functions"
 import uploadTrack from "../backend/UploadTrack"
-import {useAppSelector} from "../../../redux/reduxHooks"
+import {useAppSelector, useAppDispatch} from "../../../redux/reduxHooks"
+import {importAction} from "../../MusicMakerView/redux/notesReducer"
 import {createSelector} from 'reselect'
 import {useState} from 'react'
 
 const UploadDialog = ({prevLink} : IUploadDialogProps) => {
-    const currentUser = useAppSelector((state: any) => state.login)
+    const currentUser = useAppSelector((state: any) => state.login);
+    const dispatch = useAppDispatch();
 
     const selectNotes = createSelector(
         (state: any) => state.musicMaker,
@@ -37,7 +39,6 @@ const UploadDialog = ({prevLink} : IUploadDialogProps) => {
                                     notes,
                                     currentUser
                                 );
-            console.log("success");
         } catch (e: any) {
             const errorMsg = getErrorMessage(e);
 
@@ -52,6 +53,8 @@ const UploadDialog = ({prevLink} : IUploadDialogProps) => {
             }
             return Promise.reject();
         }
+
+        dispatch(importAction({}));
 
         return Promise.resolve('/track/' + docId);
 
@@ -85,6 +88,8 @@ const UploadDialog = ({prevLink} : IUploadDialogProps) => {
                 onBackgroundClick={clearError}
                 onClick={onSubmit}
                 prevLink={prevLink}
+                successMessage="Upload Successful! Redirecting you to your Profile..."
+                failMessage="Upload Unsuccessful, please try again!"
             >
                 <UploadDialogForm
                     title={titleMap}

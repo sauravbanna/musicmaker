@@ -3,8 +3,7 @@ import {database} from "../../../utils/config"
 import {USERNAME_EXISTS, PASSWORD_SHORT_ERROR} from "../utils/constants"
 import {doc, setDoc, getDocs, query, where, collection} from "firebase/firestore"
 
-const registerUser = async (email: string, username: string, password: string) => {
-    let userId = "";
+const registerUser = (email: string, username: string, password: string) => {
 
     const auth = getAuth();
 
