@@ -25,7 +25,6 @@ const getUserHome = () : Promise<any> => {
                 .then((userData : IUserData) => {
                     return getHomeTracks(userData.following)
                         .then((allHomeTracks : Array<string>) => {
-                            console.log(allHomeTracks);
                             return Promise.resolve({
                                ...userData,
                                homeTracks: allHomeTracks
