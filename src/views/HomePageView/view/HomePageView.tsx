@@ -6,9 +6,38 @@ import FollowedArtists from "../components/FollowedArtists/FollowedArtists"
 import HomePosts from "../components/HomePosts/HomePosts"
 import LikedSongs from "../components/LikedSongs/LikedSongs"
 import {useAppSelector} from "../../../redux/reduxHooks"
-import {useEffect} from 'react'
+import getUserHome, {IUserHomeData} from "../backend/GetUserHome"
+import {useEffect, useState} from 'react'
+import {getAuth} from "firebase/auth"
+
+
 
 const HomePageView = () => {
+
+
+    const [userData, setUserData] = useState<IUserHomeData>({
+        following: [],
+        likedTracks: [],
+        homeTracks: []
+    });
+
+    useEffect(() => {
+        getUserHomeData();
+
+    }, [])
+
+    useEffect(() => {
+        console.log(userData);
+    }, [userData])
+
+    const getUserHomeData = async () => {
+        try {
+            setUserData(await getUserHome());
+            console.log("done");
+        } catch (e: any) {
+            console.log(e);
+        }
+    }
 
     return (
         <div
@@ -32,19 +61,19 @@ const HomePageView = () => {
                 spacing={5}
             >
                 <Grid item xs={12}>
-                    <FollowedArtists />
+                    <FollowedArtists following={userData.following}/>
                 </Grid>
                 <Grid item xs={12}>
                     <AppDivider orientation="horizontal" animate={{center: true, delay: 0}}/>
                 </Grid>
                 <Grid item xs={7}>
-                    <HomePosts />
+                    <HomePosts homeTracks={userData.homeTracks}/>
                 </Grid>
                 <Grid item>
                 </Grid>
                 <Grid item xs={4}>
                     <Stack>
-                        <LikedSongs />
+                        <LikedSongs likedTracks={userData.likedTracks}/>
                     </Stack>
                 </Grid>
             </Grid>

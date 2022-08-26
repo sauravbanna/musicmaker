@@ -44,7 +44,7 @@ function SongPreview({title, date, author, duration, id, image, likes, comments,
                     }
             >
                 <Grid item>
-                    <img src={require("../../assets/download.png")} height={"100vh"} width={"100vh"} />
+                    <img src={image} height={"100vh"} width={"100vh"} />
                 </Grid>
                 <Grid
                     item
@@ -77,7 +77,7 @@ function SongPreview({title, date, author, duration, id, image, likes, comments,
                         {duration}
                     </Typography>
                     &nbsp;
-                    <SongPreviewButtons id={id} likes={likes} comments={comments} expanded={expanded} setExpand={setExpanded} />
+                    <SongPreviewButtons id={id} likes={likes.length} comments={comments.length} expanded={expanded} setExpand={setExpanded} />
                 </Grid>
             </Grid>
             <Accordion
@@ -96,7 +96,7 @@ function SongPreview({title, date, author, duration, id, image, likes, comments,
                 <AccordionDetails sx={{overflow: "hidden"}}>
                     <AppDivider orientation="horizontal"/>
                     &nbsp;
-                    <SongComments id={id}/>
+                    <SongComments id={id} comments={comments}/>
                 </AccordionDetails>
             </Accordion>
         </Paper>

@@ -3,11 +3,30 @@ import Typography from "@mui/material/Typography"
 import ArtistPreview from "../../../../components/ArtistPreview/ArtistPreview"
 import ScrollButtons from "../ScrollButtons/ScrollButtons"
 import useScrollComponent from "../../hooks/useScrollComponent"
+import getFollowedArtists, {IArtistData} from "../../backend/GetFollowedArtists"
 import Button from "@mui/material/Button"
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 
-const FollowedArtists = () => {
-    const array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+interface IFollowedArtistsProps {
+    following: Array<string>
+}
+
+const FollowedArtists = ({following} : IFollowedArtistsProps) => {
+    const [followingData, setFollowingData] = useState<Array<IArtistData>>([]);
+
+    useEffect(() => {
+        getFollowedArtistsData();
+    }, [following])
+
+    const getFollowedArtistsData = async () => {
+        try {
+            setFollowingData(await getFollowedArtists(following));
+            console.log("success")
+        } catch (e: any) {
+            console.log(e);
+        }
+    }
+
 
     const [scrollDiv, containerDiv, onClickLeft, onClickRight, leftButtonActive, rightButtonActive] = useScrollComponent(0);
 
@@ -50,9 +69,9 @@ const FollowedArtists = () => {
                         }
                     }
                 >
-                    {array.map((ele: number, i: number) => {
+                    {followingData.map((ele: IArtistData, i: number) => {
                         return (
-                            <ArtistPreview index={i}/>
+                            <ArtistPreview index={i} name={ele.name} image={ele.image} id={ele.id}/>
                         );
                     })}
                 </Stack>

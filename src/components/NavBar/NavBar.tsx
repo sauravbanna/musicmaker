@@ -35,11 +35,11 @@ const NavBarElement = ({to, name} : INavBarElementProps) => {
 }
 
 function NavBar(props: any) {
-    const loggedIn = useAppSelector((state) => state.login);
+    const currentUser = useAppSelector((state) => state.login);
 
     let menuItemMap : IMenuItemInfo[] = []
 
-    if (loggedIn.username == "") {
+    if (currentUser.userId == "") {
         menuItemMap.push({name: "Login", link: "/login"})
         menuItemMap.push({name: "Register", link: "/register"})
     } else {
@@ -58,7 +58,7 @@ function NavBar(props: any) {
             <SearchBar width={"30%"} />
             <AppMenu
                 menuItems={menuItemMap}
-                name={loggedIn.username}
+                name={currentUser.username}
             />
         </div>
     );

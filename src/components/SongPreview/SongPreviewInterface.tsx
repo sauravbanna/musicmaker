@@ -8,8 +8,8 @@ export interface ISongPreviewMiniProps {
 
 export interface ISongPreviewProps extends ISongPreviewMiniProps {
     date: string,
-    likes: number,
-    comments: number,
+    likes: Array<string>,
+    comments: Array<any>,
     index: number
 }
 
@@ -22,5 +22,6 @@ export interface ISongPreviewButtonsProps {
 }
 
 export interface ISongCommentsProps {
-    id: number
+    id: number,
+    comments: Array<string>
 }

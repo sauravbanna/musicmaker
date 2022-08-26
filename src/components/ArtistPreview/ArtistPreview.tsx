@@ -5,12 +5,13 @@ import useFadeInComponent from "../../hooks/useFadeInComponent"
 
 
 interface IArtistPreviewProps {
-    index: number
+    index: number,
+    id: string,
+    name: string,
+    image: string
 }
 
-const ArtistPreview = ({index} : IArtistPreviewProps) => {
-    const name = "user2"
-    const img = <img src={require("../../assets/download.png")} height={"130vh"} width={"130vh"} />
+const ArtistPreview = ({index, id, name, image} : IArtistPreviewProps) => {
 
     const fadeDiv = useFadeInComponent(index);
 
@@ -33,7 +34,7 @@ const ArtistPreview = ({index} : IArtistPreviewProps) => {
                 }
                 spacing={2}
             >
-                {img}
+                <img src={image} height={"130vh"} width={"130vh"} />
                 <Typography variant="h5">
                     {name}
                     {index}

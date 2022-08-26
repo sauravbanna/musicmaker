@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux'
 import MusicMakerReducer from "../views/MusicMakerView/redux/MusicMakerReducer"
-import LoginReducer from "../views/LoginRegisterView/redux/LoginReducer"
+import LoginReducer from "./LoginReducer"
 
 const rootReducer = combineReducers({
                                         musicMaker: MusicMakerReducer,

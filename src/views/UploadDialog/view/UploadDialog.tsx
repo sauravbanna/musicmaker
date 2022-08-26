@@ -31,7 +31,6 @@ const UploadDialog = ({prevLink} : IUploadDialogProps) => {
 
         try {
             checkEmptyFields();
-            console.log("what");
             docId = await uploadTrack(
                                     titleMap.value,
                                     descriptionMap.value,

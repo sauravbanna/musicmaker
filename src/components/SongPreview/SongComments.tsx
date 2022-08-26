@@ -5,13 +5,12 @@ import Comment from "../Comment/Comment"
 import CommentButton from "../CommentButton/CommentButton"
 import {ISongCommentsProps} from "./SongPreviewInterface"
 
-const SongComments = ({id} : ISongCommentsProps) => {
-    const array = [1, 2, 3, 4, 5, 6, 7, 8]
+const SongComments = ({id, comments} : ISongCommentsProps) => {
 
     return (
         <div>
             <Stack sx={{maxWidth: "80%", maxHeight: "100vh", paddingLeft: "1em", justifyContent: "center", display: "flex"}}>
-                {array.map((ele) => {
+                {comments.map((ele) => {
                     return (
                         <Comment />
                     );

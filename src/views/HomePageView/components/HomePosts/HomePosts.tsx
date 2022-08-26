@@ -1,10 +1,28 @@
 import PostList from "../../../../components/PostList/PostList"
+import getHomeTracks, {ITrackDataWithFeedback} from "../../backend/GetHomeTracks"
+import {useState, useEffect} from "react"
 
-const HomePosts = () => {
-    const array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+interface IHomePostsProps {
+    homeTracks: Array<string>
+}
+
+const HomePosts = ({homeTracks} : IHomePostsProps) => {
+    const [homeTracksData, setHomeTracksData] = useState<Array<ITrackDataWithFeedback>>([]);
+
+    useEffect(() => {
+        getHomeTracksData();
+    }, [homeTracks])
+
+    const getHomeTracksData = async () => {
+        try {
+            setHomeTracksData(await getHomeTracks(homeTracks));
+        } catch (e: any) {
+            console.log(e);
+        }
+    }
 
     return (
-        <PostList name="" posts={array} justify="flex-start" fullWidth={true}/>
+        <PostList name="" posts={homeTracksData} justify="flex-start" fullWidth={true}/>
     );
 }
 

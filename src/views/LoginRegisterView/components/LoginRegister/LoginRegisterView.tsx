@@ -8,7 +8,7 @@ import InputField from "../../../../components/InputField/InputField"
 import AppDivider from "../../../../components/AppDivider/AppDivider"
 import SubmitButton from "../../../../components/SubmitButton/SubmitButton"
 import {useAppDispatch} from "../../../../redux/reduxHooks"
-import {logIn} from "../../redux/LoginReducer"
+import {logIn} from "../../../../redux/LoginReducer"
 import {FADE_IN, ELASTIC_EASE} from "../../../../utils/constants"
 import {useEffect, useRef, useState} from 'react'
 import useInputAndError from "../../../../hooks/useInputAndError"

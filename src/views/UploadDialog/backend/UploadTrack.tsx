@@ -1,5 +1,5 @@
 import {database, storage} from "../../../utils/config"
-import {doc, setDoc, collection, serverTimestamp} from "firebase/firestore"
+import {doc, setDoc, collection, serverTimestamp, updateDoc} from "firebase/firestore"
 import {ref, uploadBytes, getDownloadURL} from "firebase/storage"
 
 
@@ -7,19 +7,25 @@ import {ref, uploadBytes, getDownloadURL} from "firebase/storage"
 const uploadTrack = (title: string, description: string, image: File, notes: any, currentUser: any) => {
     const docId = doc(collection(database, "tracks")).id;
 
-    return uploadCoverArt(docId, image)
-            .then((downloadUrl : string) => {
-                return makeNewTrack(downloadUrl, title, description, docId, currentUser)
-                        .then(() => {
-                            return makeNewNotes(docId, notes)
-                                    .then(() => {
-                                        return makeNewFeedback(docId)
+    return addTrackToUserDoc(docId, currentUser)
+            .then(() => {
+                return uploadCoverArt(docId, image)
+                    .then((downloadUrl : string) => {
+                        return makeNewTrack(downloadUrl, title, description, docId, currentUser)
+                                .then(() => {
+                                    return makeNewNotes(docId, notes)
                                             .then(() => {
-                                                return Promise.resolve(docId);
+                                                return makeNewFeedback(docId)
+                                                    .then(() => {
+                                                        return Promise.resolve(docId);
+                                                    })
                                             })
-                                    })
-                        })
-            });
+                                })
+                    });
+            })
+
+
+
 }
 
 const uploadCoverArt = (docId: string, image: File) => {
@@ -31,7 +37,7 @@ const uploadCoverArt = (docId: string, image: File) => {
 
     return uploadBytes(imageStorage, image)
             .then((snapshot: any) => {
-                return Promise.resolve(getDownloadURL(snapshot.ref));
+                return "coverArt/" + docId + "." + fileExt;
             })
 }
 
@@ -41,8 +47,8 @@ const makeNewTrack = (filename: string, title: string, description: string, docI
                description: description,
                image: filename,
                date: serverTimestamp(),
-               username: currentUser.username,
-               userId: currentUser.userId
+               userId: currentUser.userId,
+               username: currentUser.username
            })
 }
 
@@ -57,6 +63,15 @@ const makeNewFeedback = (docId: string) => {
         likes: {},
         comments: {}
     })
+}
+
+const addTrackToUserDoc = (docId: string, currentUser: any) => {
+
+    return setDoc(doc(database, "users", currentUser.userId), {
+        tracks: {
+            [docId]: 1
+        }
+    }, {merge: true})
 }
 
 export default uploadTrack

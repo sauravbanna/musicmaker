@@ -5,6 +5,10 @@ import RegisterView from "./views/LoginRegisterView/view/RegisterView"
 import HomePageView from "./views/HomePageView/view/HomePageView"
 import LogOutDialog from "./views/LogOutDialog/view/LogOutDialog"
 import UploadDialog from "./views/UploadDialog/view/UploadDialog"
+import {useAppDispatch, useAppSelector} from "./redux/reduxHooks"
+import {logInUserId, logInUsername} from "./redux/LoginReducer"
+import getUsername from "./AppBackend"
+import {getAuth, onAuthStateChanged} from "firebase/auth"
 import {Routes, Route, useLocation} from 'react-router-dom'
 import { ThemeProvider } from '@mui/material/styles'
 import { APP_COLOR } from "./utils/constants"
@@ -15,6 +19,32 @@ import {useEffect} from 'react'
 
 
 function App() {
+  const dispatch = useAppDispatch();
+  const userId = useAppSelector((state : any) => state.login.userId);
+
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user : any) => {
+        if (user) {
+            dispatch(logInUserId(user.uid));
+        } else {
+            dispatch(logInUserId(""));
+        }
+    })
+
+  }, [])
+
+  useEffect(() => {
+    updateUsername();
+  }, [userId])
+
+  const updateUsername = async () => {
+    if (userId != "") {
+        const newUsername = await getUsername(userId);
+        dispatch(logInUsername(newUsername));
+    }
+  }
+
   document.body.style.backgroundColor = APP_COLOR;
 
   let url : any = useLocation();

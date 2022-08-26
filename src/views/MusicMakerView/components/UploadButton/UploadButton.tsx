@@ -6,19 +6,16 @@ const UploadButton = () => {
     const currentPath = useLocation();
     const navigate = useNavigate();
 
-    const currentUser = useAppSelector((state) => state.login);
+    const currentUser = useAppSelector((state) => state.login.userId);
 
     const showLogInWarning = () => {
-        if (checkCurrentUserNull()) {
+        if (currentUser == "") {
             console.log("not logged in");
         } else {
             navigate("/upload", {state: {background: currentPath.pathname}});
         }
     }
 
-    const checkCurrentUserNull = () => {
-        return currentUser.username == "" && currentUser.userId == ""
-    }
 
     return (
         <AppButton
