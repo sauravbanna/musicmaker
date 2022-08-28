@@ -9,6 +9,9 @@ import ProfileActions from "../components/ProfileActions/ProfileActions"
 import ProfilePosts from "../components/ProfilePosts/ProfilePosts"
 import ProfileStats from "../components/ProfileStats/ProfileStats"
 import AppDivider from "../../../components/AppDivider/AppDivider"
+import getProfileData, {IProfileDataWithMetrics} from "../backend/GetProfileData"
+import {useParams} from 'react-router-dom'
+import {useState} from 'react'
 import {gsap} from "gsap"
 
 function ProfileView(props: any) {
@@ -28,6 +31,32 @@ function ProfileView(props: any) {
                                     }
                                 )
     }, [])
+
+    const {uid} = useParams();
+    const [profileData, setProfileData] = useState<IProfileDataWithMetrics>({
+        username: "default",
+        about: "default",
+        tracks: [],
+        tracksCount: 0,
+        followingCount: 0,
+        following: [],
+        likedTracks: [],
+        likedTracksCount: 0,
+        followersCount: 0,
+        followers: []
+    });
+
+    useEffect(() => {
+        getProfile();
+    }, [])
+
+    const getProfile = async () => {
+        try {
+            setProfileData(await getProfileData(String(uid)));
+        } catch (e: any) {
+            console.log(e);
+        }
+    }
 
     return (
         <div

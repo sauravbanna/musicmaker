@@ -43,7 +43,7 @@ function NavBar(props: any) {
         menuItemMap.push({name: "Login", link: "/login"})
         menuItemMap.push({name: "Register", link: "/register"})
     } else {
-        menuItemMap.push({name: "Your Profile", link: "/profile"})
+        menuItemMap.push({name: "Your Profile", link: `/user/${currentUser.userId}`})
         menuItemMap.push({name: "Settings", link: "/settings"})
         menuItemMap.push({name: "Log Out", link:"/logout", relative: true})
     }

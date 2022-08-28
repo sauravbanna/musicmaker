@@ -56,7 +56,7 @@ function App() {
         <NavBar />
         <Routes location={backgroundPage || url}>
             <Route path="/" element={<HomePageView />} />
-            <Route path="/user/:username" element={<ProfileView />} />
+            <Route path="/user/:uid" element={<ProfileView />} />
             <Route path="/login" element={<LoginView />} />
             <Route path="/register" element={<RegisterView />} />
             <Route path="/create" element={<MusicMakerView />} />

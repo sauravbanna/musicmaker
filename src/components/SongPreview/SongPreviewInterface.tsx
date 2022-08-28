@@ -1,3 +1,5 @@
+import {Timestamp} from "firebase/firestore"
+
 export interface ISongPreviewMiniProps {
     title: string,
     author: string,
@@ -7,7 +9,7 @@ export interface ISongPreviewMiniProps {
 }
 
 export interface ISongPreviewProps extends ISongPreviewMiniProps {
-    date: string,
+    date: Timestamp,
     likes: Array<string>,
     comments: Array<any>,
     index: number

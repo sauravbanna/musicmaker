@@ -26,10 +26,11 @@ const getHomeTracks = (homeTracks : Array<string>) : Promise<Array<ITrackDataWit
                     .then((trackData : ITrackData) => {
                         return getTrackFeedback(trackId)
                                 .then((feedbackData: IFeedbackData) => {
-                                    return Promise.resolve({
-                                        ...trackData,
-                                        ...feedbackData
-                                    })
+                                    homeTracksArray.push({
+                                                             ...trackData,
+                                                             ...feedbackData
+                                                         })
+                                    return Promise.resolve(homeTracksArray);
                                 })
                     })
         })
@@ -38,23 +39,30 @@ const getHomeTracks = (homeTracks : Array<string>) : Promise<Array<ITrackDataWit
 
 const getHomeTrack = (id: string) : Promise<ITrackData> => {
     console.log(id);
-    return getDoc(doc(database, "tracks", id))
+    return getDoc(doc(database, "tracks", id.trim()))
             .then((docSnap : any) => {
                 const data = docSnap.data();
 
-                return Promise.resolve({
-                    title: data.title,
-                    image: data.image,
-                    name: data.username,
-                    date: data.date,
-                    id: data.userId,
-                    description: data.description
-                })
+                const imageRef = ref(storage, data.image);
+
+                return getDownloadURL(imageRef)
+                        .then((downloadURL: string) => {
+                            return Promise.resolve({
+                                title: data.title,
+                                image: downloadURL,
+                                name: data.username,
+                                date: data.date,
+                                id: data.userId,
+                                description: data.description
+                            })
+                        })
+
+
             })
 }
 
 const getTrackFeedback = (id: string) : Promise<IFeedbackData> => {
-    return getDoc(doc(database, "feedback", id))
+    return getDoc(doc(database, "feedback", id.trim()))
             .then((docSnap: any) => {
                 const data = docSnap.data();
 

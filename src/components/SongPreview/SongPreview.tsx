@@ -10,6 +10,7 @@ import SongComments from "./SongComments"
 import AppDivider from "../AppDivider/AppDivider"
 import useFadeInComponent from "../../hooks/useFadeInComponent"
 import {SONG_PREVIEW_HEIGHT} from "../../utils/constants"
+import {getTimeDiff} from "../../utils/functions"
 import {useState} from 'react'
 
 interface IOpacityRef {
@@ -19,6 +20,8 @@ interface IOpacityRef {
 function SongPreview({title, date, author, duration, id, image, likes, comments, index} : ISongPreviewProps) {
     const [expanded, setExpanded] = useState<boolean>(false);
     const fadeDiv = useFadeInComponent(index);
+
+
 
     return (
         <Paper
@@ -62,7 +65,7 @@ function SongPreview({title, date, author, duration, id, image, likes, comments,
                             <Typography
                                 variant="subtitle1"
                             >
-                                {date}
+                                {getTimeDiff(date)}
                             </Typography>
                         </Grid>
                     </Grid>

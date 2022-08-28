@@ -21,6 +21,8 @@ const HomePosts = ({homeTracks} : IHomePostsProps) => {
         }
     }
 
+    console.log(homeTracksData)
+
     return (
         <PostList name="" posts={homeTracksData} justify="flex-start" fullWidth={true}/>
     );
