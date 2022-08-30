@@ -1,3 +1,4 @@
+import IProfileStatsProps from "./ProfileStatsInterface"
 import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
 import AppDivider from "../../../../components/AppDivider/AppDivider"
@@ -22,7 +23,7 @@ const ProfileStat = (name : string, value : number) => {
     );
 }
 
-const ProfileStats = () => {
+const ProfileStats = ({following, followers, tracksCount} : IProfileStatsProps) => {
     const statsDiv = useRef<any>();
     const timeline = useRef<any>();
 
@@ -57,9 +58,9 @@ const ProfileStats = () => {
                     direction="row"
                     justifyContent="space-evenly"
                 >
-                    {ProfileStat("Followers", 4)}
-                    {ProfileStat("Following", 4)}
-                    {ProfileStat("Tracks", 4)}
+                    {ProfileStat("Followers", followers.length)}
+                    {ProfileStat("Following", following.length)}
+                    {ProfileStat("Tracks", tracksCount)}
                 </Stack>
                 <AppDivider orientation="horizontal" animate={{center: true, delay: 0}} />
             </Stack>

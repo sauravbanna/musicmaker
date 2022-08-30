@@ -1,5 +1,5 @@
 import PostList from "../../../../components/PostList/PostList"
-import getHomeTracks, {ITrackDataWithFeedback} from "../../backend/GetHomeTracks"
+import getTracks, {ITrackDataWithFeedback} from "../../../../backend/GetTracks"
 import {useState, useEffect} from "react"
 
 interface IHomePostsProps {
@@ -10,12 +10,12 @@ const HomePosts = ({homeTracks} : IHomePostsProps) => {
     const [homeTracksData, setHomeTracksData] = useState<Array<ITrackDataWithFeedback>>([]);
 
     useEffect(() => {
-        getHomeTracksData();
+        getHomeTracks();
     }, [homeTracks])
 
-    const getHomeTracksData = async () => {
+    const getHomeTracks = async () => {
         try {
-            setHomeTracksData(await getHomeTracks(homeTracks));
+            setHomeTracksData(await getTracks(homeTracks));
         } catch (e: any) {
             console.log(e);
         }

@@ -13,6 +13,7 @@ import {getAuth} from "firebase/auth"
 
 
 const HomePageView = () => {
+    const currentUser = useAppSelector((state : any) => state.login)
 
 
     const [userData, setUserData] = useState<IUserHomeData>({
@@ -23,17 +24,11 @@ const HomePageView = () => {
 
     useEffect(() => {
         getUserHomeData();
-
-    }, [])
-
-    useEffect(() => {
-        console.log(userData);
-    }, [userData])
+    }, [currentUser.userId])
 
     const getUserHomeData = async () => {
         try {
             setUserData(await getUserHome());
-            console.log("done");
         } catch (e: any) {
             console.log(e);
         }

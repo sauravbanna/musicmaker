@@ -36,6 +36,7 @@ function ProfileView(props: any) {
     const [profileData, setProfileData] = useState<IProfileDataWithMetrics>({
         username: "default",
         about: "default",
+        image: "default",
         tracks: [],
         tracksCount: 0,
         followingCount: 0,
@@ -88,11 +89,18 @@ function ProfileView(props: any) {
                     xs={PROFILE_INFO_WIDTH}
                     sx={
                             {
-                                minHeight: PROFILE_INFO_HEIGHT
+                                minHeight: PROFILE_INFO_HEIGHT,
+                                alignItems: "center",
+                                display: "flex",
+                                justifyContent: "center"
                             }
                         }
                 >
-                    <ProfileInfo />
+                    <ProfileInfo
+                        username={profileData.username}
+                        about={profileData.about}
+                        image={profileData.image}
+                    />
                 </Grid>
                 <Grid item xs={12 - PROFILE_INFO_WIDTH}>
                     <ProfileActions />
@@ -101,10 +109,16 @@ function ProfileView(props: any) {
                     <AppDivider orientation="horizontal" animate={{center: true, delay: 0}} />
                 </Grid>
                 <Grid item xs={PROFILE_POSTS_WIDTH}>
-                    <ProfilePosts />
+                    <ProfilePosts
+                        tracks={profileData.tracks}
+                    />
                 </Grid>
                 <Grid item xs={12 - PROFILE_POSTS_WIDTH}>
-                    <ProfileStats />
+                    <ProfileStats
+                        tracksCount={profileData.tracksCount}
+                        following={profileData.following}
+                        followers={profileData.followers}
+                    />
                 </Grid>
             </Grid>
 

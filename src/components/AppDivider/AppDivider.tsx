@@ -4,7 +4,7 @@ import {BACKGROUND_COLOR, FADE_IN, BUTTON_HOVER} from "../../utils/constants"
 import {useRef, useEffect} from "react"
 import {gsap} from "gsap"
 
-function AppDivider({animate, orientation} : IAppDividerProps) {
+function AppDivider({animate, orientation, style} : IAppDividerProps) {
     const dividerDiv = useRef<any>();
     const timeline = useRef<any>();
 
@@ -38,10 +38,10 @@ function AppDivider({animate, orientation} : IAppDividerProps) {
             sx={
                     {
                         borderBottomWidth: "0.15em",
-                        borderRightWidth: "0.15em",
                         borderColor: BUTTON_HOVER,
                         borderRadius: "0.05em",
-                        position: "relative"
+                        position: "relative",
+                        ...style
                     }
                 }
         />

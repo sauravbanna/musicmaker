@@ -37,7 +37,6 @@ const ArtistPreview = ({index, id, name, image} : IArtistPreviewProps) => {
                 <img src={image} height={"130vh"} width={"130vh"} />
                 <Typography variant="h5">
                     {name}
-                    {index}
                 </Typography>
             </Stack>
         </Paper>

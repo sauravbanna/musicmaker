@@ -5,6 +5,7 @@ import {ref, getDownloadURL} from "firebase/storage"
 interface IProfileData {
     username: string,
     about: string,
+    image: string,
     tracks: Array<string>,
     tracksCount: number,
     followingCount: number,
@@ -44,16 +45,24 @@ const getProfileDataFromDoc = (uid : string) => {
                 const following = Object.keys(data.following);
                 const likedTracks = Object.keys(data.likedTracks);
 
-                return Promise.resolve({
-                    username: data.username,
-                    about: data.about,
-                    tracks,
-                    tracksCount: tracks.length,
-                    followingCount: following.length,
-                    following,
-                    likedTracks,
-                    likedTracksCount: likedTracks.length
-                })
+                const imageRef = ref(storage, data.image);
+
+                return getDownloadURL(imageRef)
+                        .then((downloadURL: string) => {
+                            return Promise.resolve({
+                                username: data.username,
+                                about: data.about,
+                                image: downloadURL,
+                                tracks,
+                                tracksCount: tracks.length,
+                                followingCount: following.length,
+                                following,
+                                likedTracks,
+                                likedTracksCount: likedTracks.length
+                            })
+                        })
+
+
             })
 }
 

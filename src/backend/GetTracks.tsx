@@ -1,5 +1,5 @@
 import {doc, getDoc} from "firebase/firestore"
-import {database, storage} from "../../../utils/config"
+import {database, storage} from "../utils/config"
 import {ref, getDownloadURL} from "firebase/storage"
 
 export interface ITrackData {
@@ -19,10 +19,10 @@ interface IFeedbackData {
 export interface ITrackDataWithFeedback extends ITrackData, IFeedbackData {
 }
 
-const getHomeTracks = (homeTracks : Array<string>) : Promise<Array<ITrackDataWithFeedback>> => {
+const getTracks = (homeTracks : Array<string>) : Promise<Array<ITrackDataWithFeedback>> => {
     return homeTracks.reduce((prevPromise: Promise<any>, trackId) => {
         return prevPromise.then((homeTracksArray: Array<ITrackDataWithFeedback>) => {
-            return getHomeTrack(trackId)
+            return getTrack(trackId)
                     .then((trackData : ITrackData) => {
                         return getTrackFeedback(trackId)
                                 .then((feedbackData: IFeedbackData) => {
@@ -37,8 +37,7 @@ const getHomeTracks = (homeTracks : Array<string>) : Promise<Array<ITrackDataWit
     }, Promise.resolve([]))
 }
 
-const getHomeTrack = (id: string) : Promise<ITrackData> => {
-    console.log(id);
+const getTrack = (id: string) : Promise<ITrackData> => {
     return getDoc(doc(database, "tracks", id.trim()))
             .then((docSnap : any) => {
                 const data = docSnap.data();
@@ -73,5 +72,5 @@ const getTrackFeedback = (id: string) : Promise<IFeedbackData> => {
             })
 }
 
-export default getHomeTracks
+export default getTracks
 
