@@ -41,7 +41,7 @@ const Comment = () => {
             <Grid item xs={1}>
             </Grid>
             <Grid item xs={11}>
-                <LikeButton id={2}/>
+                <LikeButton trackId={"default"}/>
             </Grid>
         </Grid>
     );

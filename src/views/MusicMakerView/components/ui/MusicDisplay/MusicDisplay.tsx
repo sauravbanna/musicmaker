@@ -4,7 +4,7 @@ import {useState, useEffect} from 'react'
 import {MemoPlayHead} from "../../control/PlayHead/PlayHead"
 import MusicDisplayProps from "./MusicDisplayInterface"
 
-export function MusicDisplay({loadedPanels, activeInstrument} : MusicDisplayProps) {
+const MusicDisplay = ({loadedPanels, activeInstrument, readOnly} : MusicDisplayProps) => {
     const [progress, setProgress] = useState(0);
 
     return (
@@ -16,7 +16,9 @@ export function MusicDisplay({loadedPanels, activeInstrument} : MusicDisplayProp
                             key={`Keys_${ele}`}
                             progress={progress}
                             instrument={ele}
-                            active={ele == activeInstrument}/>
+                            active={ele == activeInstrument}
+                            readOnly={readOnly}
+                        />
                     );
                 })}
 
@@ -25,3 +27,5 @@ export function MusicDisplay({loadedPanels, activeInstrument} : MusicDisplayProp
         </div>
     );
 }
+
+export default MusicDisplay

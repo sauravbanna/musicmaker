@@ -5,7 +5,7 @@ import Comment from "../Comment/Comment"
 import CommentButton from "../CommentButton/CommentButton"
 import {ISongCommentsProps} from "./SongPreviewInterface"
 
-const SongComments = ({id, comments} : ISongCommentsProps) => {
+const SongComments = ({trackId, comments} : ISongCommentsProps) => {
 
     return (
         <div>
@@ -22,7 +22,7 @@ const SongComments = ({id, comments} : ISongCommentsProps) => {
                 InputProps={
                     {
                         endAdornment: <InputAdornment position="end">
-                                            <CommentButton id={id} />
+                                            <CommentButton trackId={trackId} />
                                         </InputAdornment>
                     }
                 }

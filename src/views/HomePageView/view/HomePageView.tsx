@@ -6,6 +6,7 @@ import FollowedArtists from "../components/FollowedArtists/FollowedArtists"
 import HomePosts from "../components/HomePosts/HomePosts"
 import LikedSongs from "../components/LikedSongs/LikedSongs"
 import {useAppSelector} from "../../../redux/reduxHooks"
+import {DEFAULT_HOME_DATA} from "../utils/constants"
 import getUserHome, {IUserHomeData} from "../backend/GetUserHome"
 import {useEffect, useState} from 'react'
 import {getAuth} from "firebase/auth"
@@ -27,10 +28,14 @@ const HomePageView = () => {
     }, [currentUser.userId])
 
     const getUserHomeData = async () => {
-        try {
-            setUserData(await getUserHome());
-        } catch (e: any) {
-            console.log(e);
+        if (currentUser.userId != "none") {
+            try {
+                setUserData(await getUserHome());
+            } catch (e: any) {
+                console.log(e);
+            }
+        } else {
+            setUserData(DEFAULT_HOME_DATA);
         }
     }
 
@@ -66,11 +71,7 @@ const HomePageView = () => {
                 </Grid>
                 <Grid item>
                 </Grid>
-                <Grid item xs={4}>
-                    <Stack>
-                        <LikedSongs likedTracks={userData.likedTracks}/>
-                    </Stack>
-                </Grid>
+
             </Grid>
         </div>
     );

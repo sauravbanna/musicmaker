@@ -40,13 +40,13 @@ const getArtistName = (artistId: string) => {
             .then((docSnap : any) => {
                 return Promise.resolve({
                     name: docSnap.data().username,
-                    imageURL: docSnap.data().image
+                    image: docSnap.data().image
                 });
             })
 }
 
 const getArtistImage = (imageURL: string) => {
-    const imageRef = ref(storage, "coverArt/EOZ79XMy3eAHp9QMD7em.png");
+    const imageRef = ref(storage, imageURL);
 
     return getDownloadURL(imageRef);
 }

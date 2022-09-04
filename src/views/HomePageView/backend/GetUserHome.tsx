@@ -2,11 +2,6 @@ import {getAuth} from "firebase/auth"
 import {database} from "../../../utils/config"
 import {doc, setDoc, getDocs, getDoc, query, where, collection, FieldPath} from "firebase/firestore"
 
-// get user's following artists
-// get user's liked tracks
-// for each followed artist
-// get their tracks list
-// following, likes, tracks
 
 interface IUserData {
     following: Array<string>,

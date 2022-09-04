@@ -55,11 +55,12 @@ const PostList = ({name, posts, justify, fullWidth} : IPostListProps) => {
                     {posts.map((ele : any, i: number) => {
                         return (
                             <SongPreview
+                                trackId={ele.trackId}
                                 title={ele.title}
                                 date={ele.date}
                                 author={ele.name}
                                 duration="10:00"
-                                id={ele.id}
+                                authorId={ele.id}
                                 image={ele.image}
                                 likes={ele.likes}
                                 comments={ele.comments}

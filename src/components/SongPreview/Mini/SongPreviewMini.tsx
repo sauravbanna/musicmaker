@@ -1,6 +1,6 @@
 import {ISongPreviewMiniProps} from "../SongPreviewInterface"
 
-const SongPreviewMini = ({id, title, author, duration, image}: ISongPreviewMiniProps) => {
+const SongPreviewMini = ({authorId, title, author, duration, image}: ISongPreviewMiniProps) => {
     return (
         <div> f </div>
     );

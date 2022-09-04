@@ -3,6 +3,7 @@ import {database, storage} from "../utils/config"
 import {ref, getDownloadURL} from "firebase/storage"
 
 export interface ITrackData {
+    trackId: string,
     title: string,
     image: string,
     name: string,
@@ -47,6 +48,7 @@ const getTrack = (id: string) : Promise<ITrackData> => {
                 return getDownloadURL(imageRef)
                         .then((downloadURL: string) => {
                             return Promise.resolve({
+                                trackId: id,
                                 title: data.title,
                                 image: downloadURL,
                                 name: data.username,
@@ -67,7 +69,7 @@ const getTrackFeedback = (id: string) : Promise<IFeedbackData> => {
 
                 return Promise.resolve({
                     likes: Object.keys(data.likes),
-                    comments: Object.keys(data.comments)
+                    comments: Object.values(data.comments)
                 })
             })
 }

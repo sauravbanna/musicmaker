@@ -5,7 +5,8 @@ export default interface NoteProps {
     progress: number,
     setPlayNote: (playNote : boolean) => void,
     removeNote: Function,
-    moveNote: Function
+    moveNote: Function,
+    readOnly: boolean
 }
 
 

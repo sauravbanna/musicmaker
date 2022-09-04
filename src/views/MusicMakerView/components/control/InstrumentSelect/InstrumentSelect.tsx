@@ -5,7 +5,7 @@ import {styles} from "./InstrumentSelectStyles"
 import AppButton from "../../../../../components/AppButton/AppButton"
 import InstrumentSelectProps from "./InstrumentSelectInterface"
 
-export function InstrumentSelect({onClick, setLoadedPanels} : InstrumentSelectProps) {
+const InstrumentSelect = ({onClick, setLoadedPanels} : InstrumentSelectProps) => {
     const [activeButton, setActiveButton] = useState(0);
 
     useEffect(() => {
@@ -33,3 +33,5 @@ export function InstrumentSelect({onClick, setLoadedPanels} : InstrumentSelectPr
     );
 
 }
+
+export default InstrumentSelect

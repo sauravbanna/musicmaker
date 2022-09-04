@@ -4,7 +4,7 @@ import {useState, memo} from 'react'
 import {notesSelectors} from "../../../utils/constants"
 import KeysProps from './KeysInterface'
 
-function Keys({progress, instrument, active} : KeysProps) {
+function Keys({progress, instrument, active, readOnly} : KeysProps) {
     return (
         <div style={styles(active)}>
             {notesSelectors(instrument).map((ele, i) => {
@@ -15,7 +15,9 @@ function Keys({progress, instrument, active} : KeysProps) {
                         progress={progress}
                         key={`${instrument}_Key_${ele}`}
                         id={`${instrument}_Key_${ele}`}
-                        grey={i % 2 == 0}/>
+                        grey={i % 2 == 0}
+                        readOnly={readOnly}
+                    />
                 );
             })}
         </div>

@@ -22,7 +22,6 @@ export function elementStyles(hover: boolean) {
         paddingRight: "1em",
         minHeight: "100%",
         backgroundColor: hover ? "rgba(0, 0, 0, 0.2)" : "transparent",
-        textDecoration: "none",
         color: "black",
         display: "flex",
         alignItems: "center"

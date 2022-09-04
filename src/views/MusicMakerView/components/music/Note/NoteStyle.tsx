@@ -1,15 +1,23 @@
 import {NOTE_COLOR} from "../../../utils/constants"
 
 
-export function styles(isEditing : boolean) {
+export function styles(isEditing : boolean, readOnly: boolean) {
     const grabCursor = isEditing ?
                         {
                             cursor: "grabbing"
                         }
                         :
+                        readOnly ?
+                        {
+                            cursor: "default"
+                        }
+                        :
                         {
                             cursor: "grab"
                         }
+
+
+
 
 
     return {

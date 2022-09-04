@@ -10,6 +10,7 @@ import SongComments from "./SongComments"
 import AppDivider from "../AppDivider/AppDivider"
 import useFadeInComponent from "../../hooks/useFadeInComponent"
 import {SONG_PREVIEW_HEIGHT} from "../../utils/constants"
+import {useNavigate} from 'react-router-dom'
 import {getTimeDiff} from "../../utils/functions"
 import {useState} from 'react'
 
@@ -17,11 +18,11 @@ interface IOpacityRef {
     opacity: number
 }
 
-function SongPreview({title, date, author, duration, id, image, likes, comments, index} : ISongPreviewProps) {
+function SongPreview({trackId, title, date, author, duration, authorId, image, likes, comments, index} : ISongPreviewProps) {
     const [expanded, setExpanded] = useState<boolean>(false);
     const fadeDiv = useFadeInComponent(index);
 
-
+    const navigate = useNavigate();
 
     return (
         <Paper
@@ -31,9 +32,13 @@ function SongPreview({title, date, author, duration, id, image, likes, comments,
                 {
                     {
                         borderRadius: "0.8em",
-                        overflow: "hidden"
+                        overflow: "hidden",
+                        cursor: "pointer"
                     }
                 }
+            onClick={() => {
+                navigate(`/track/${trackId}`);
+            }}
         >
             <Grid
                 container
@@ -80,7 +85,7 @@ function SongPreview({title, date, author, duration, id, image, likes, comments,
                         {duration}
                     </Typography>
                     &nbsp;
-                    <SongPreviewButtons id={id} likes={likes.length} comments={comments.length} expanded={expanded} setExpand={setExpanded} />
+                    <SongPreviewButtons trackId={trackId} likes={likes.length} comments={comments.length} expanded={expanded} setExpand={setExpanded} />
                 </Grid>
             </Grid>
             <Accordion
@@ -99,7 +104,7 @@ function SongPreview({title, date, author, duration, id, image, likes, comments,
                 <AccordionDetails sx={{overflow: "hidden"}}>
                     <AppDivider orientation="horizontal"/>
                     &nbsp;
-                    <SongComments id={id} comments={comments}/>
+                    <SongComments trackId={trackId} comments={comments}/>
                 </AccordionDetails>
             </Accordion>
         </Paper>

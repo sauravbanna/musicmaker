@@ -12,7 +12,10 @@ const LikedSongs = ({likedTracks} : ILikedSongsProps) => {
         <Stack>
             {array.map((ele: number) => {
                 return (
-                    <SongPreviewMini id={ele} title="song" author="user3" duration="10:00" image="l"/>
+                    <SongPreviewMini
+                        authorId=""
+                        trackId=""
+                        title="song" author="user3" duration="10:00" image="l"/>
                 );
             })}
         </Stack>

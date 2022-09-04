@@ -6,7 +6,7 @@ import {Button} from "@mui/material"
 import {gsap} from "gsap"
 import NoteProps from './NoteInterface'
 
-export function Note({id, left, right, progress, setPlayNote, removeNote, moveNote} : NoteProps) {
+export function Note({id, left, right, progress, setPlayNote, removeNote, moveNote, readOnly} : NoteProps) {
     const timeline = useRef<any>();
 
     useEffect(() => {
@@ -44,6 +44,10 @@ export function Note({id, left, right, progress, setPlayNote, removeNote, moveNo
     }, [isPlaying, isSelected])
 
     const onMouseDown = (event : any) => {
+        if (readOnly) {
+            return
+        }
+
         event.stopPropagation();
         event.preventDefault();
         setIsSelected(true);
@@ -62,6 +66,10 @@ export function Note({id, left, right, progress, setPlayNote, removeNote, moveNo
     };
 
     const onMouseUp = (event : any) => {
+        if (readOnly) {
+            return
+        }
+
         if (toDelete) {
             removeNote(id);
         }
@@ -71,6 +79,10 @@ export function Note({id, left, right, progress, setPlayNote, removeNote, moveNo
     }
 
     const onMouseMove = (event : any) => {
+        if (readOnly) {
+            return
+        }
+
         event.stopPropagation();
         event.preventDefault();
         if (isSelected) {
@@ -81,6 +93,10 @@ export function Note({id, left, right, progress, setPlayNote, removeNote, moveNo
     }
 
     const onMouseLeave = (event : any) => {
+        if (readOnly) {
+            return
+        }
+
         resetBool();
     }
 
@@ -107,10 +123,12 @@ export function Note({id, left, right, progress, setPlayNote, removeNote, moveNo
         onMouseUp={onMouseUp}
         onMouseMove={onMouseMove}
         onMouseLeave={onMouseLeave}
-        style={{...styles(isSelected),
+        style={{...styles(isSelected, readOnly),
                     left: `${left + (isEditing ? leftChange : 0)}px`,
                     minWidth: `${(right + (isEditing ? rightChange : 0)) - (left + (isEditing ? leftChange : 0))}px`}}>
-            <ResizerBar id={`Resizers_${id}`} onResize={onResize} onResizeStart={onResizeStart}/>
+            {readOnly ? null
+                : <ResizerBar id={`Resizers_${id}`} onResize={onResize} onResizeStart={onResizeStart}/>
+            }
         </div>
     );
 

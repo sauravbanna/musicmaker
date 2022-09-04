@@ -1,6 +1,7 @@
 import Stack from "@mui/material/Stack"
 import Paper from "@mui/material/Paper"
 import Typography from "@mui/material/Typography"
+import {useNavigate} from 'react-router-dom'
 import useFadeInComponent from "../../hooks/useFadeInComponent"
 
 
@@ -15,14 +16,20 @@ const ArtistPreview = ({index, id, name, image} : IArtistPreviewProps) => {
 
     const fadeDiv = useFadeInComponent(index);
 
+    const navigate = useNavigate();
+
     return (
         <Paper
             ref={fadeDiv}
             sx={
                 {
-                    borderRadius: "1em"
+                    borderRadius: "1em",
+                    cursor: "pointer"
                 }
             }
+            onClick={() => {
+                navigate(`/user/${id}`);
+            }}
         >
             <Stack
                 sx={

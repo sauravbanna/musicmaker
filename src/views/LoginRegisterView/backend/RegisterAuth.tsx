@@ -27,7 +27,9 @@ const addUserToDb = (id: string, username: string, email: string) => {
         likedTracks: {},
         tracks: {},
         username: username,
-        email: email
+        email: email,
+        about: "No Bio Yet...",
+        image: "coverArt/DEFAULT_PFP.jpg"
     }).then(() => {
         return setDoc(doc(database, "followers", id), {
                 followers: {}

@@ -1,4 +1,4 @@
 export default interface ICommentButtonProps {
-    id: number
+    trackId: string
 
 }

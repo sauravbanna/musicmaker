@@ -12,4 +12,6 @@ const playSlice = createSlice({
 
 export const {togglePlay} = playSlice.actions
 
-export const playReducer = playSlice.reducer
+const playReducer = playSlice.reducer
+
+export default playReducer

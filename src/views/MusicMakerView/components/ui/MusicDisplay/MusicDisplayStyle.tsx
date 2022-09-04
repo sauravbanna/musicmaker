@@ -25,6 +25,6 @@ export function musicAreaStyles() {
         minWidth: "calc(100% - 2em)",
         overflow: "hidden",
         display: "flex",
-        borderRadius: "0.4em",
+        borderRadius: "0.4em"
     }
 }

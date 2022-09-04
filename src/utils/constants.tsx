@@ -11,3 +11,4 @@ export const SONG_PREVIEW_HEIGHT = "10%"
 export const FADE_IN = 1
 export const NAV_BAR_HEIGHT = "5%"
 export const ELASTIC_EASE = "elastic.out(1.2, 1)"
+

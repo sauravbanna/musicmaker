@@ -6,6 +6,7 @@ export default interface KeyProps {
     progress: number,
     id: string,
     grey: boolean,
+    readOnly: boolean
 }
 
 

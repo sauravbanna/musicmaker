@@ -1,10 +1,11 @@
 import {Timestamp} from "firebase/firestore"
 
 export interface ISongPreviewMiniProps {
+    trackId: string,
     title: string,
     author: string,
     duration: string,
-    id: number,
+    authorId: string,
     image: string
 }
 
@@ -16,7 +17,7 @@ export interface ISongPreviewProps extends ISongPreviewMiniProps {
 }
 
 export interface ISongPreviewButtonsProps {
-    id: number,
+    trackId: string,
     expanded: boolean,
     setExpand: Function,
     likes: number,
@@ -24,6 +25,6 @@ export interface ISongPreviewButtonsProps {
 }
 
 export interface ISongCommentsProps {
-    id: number,
+    trackId: string,
     comments: Array<string>
 }

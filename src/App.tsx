@@ -1,49 +1,27 @@
-import MusicMakerView from "./views/MusicMakerView/view/MusicMakerView"
+import MusicMakerCreate from "./views/MusicMakerView/view/CreateView/MusicMakerCreate"
+import MusicMakerDisplay from "./views/MusicMakerView/view/DisplayView/MusicMakerDisplay"
 import ProfileView from "./views/ProfileView/view/ProfileView"
 import LoginView from "./views/LoginRegisterView/view/LoginView"
 import RegisterView from "./views/LoginRegisterView/view/RegisterView"
 import HomePageView from "./views/HomePageView/view/HomePageView"
 import LogOutDialog from "./views/LogOutDialog/view/LogOutDialog"
 import UploadDialog from "./views/UploadDialog/view/UploadDialog"
-import {useAppDispatch, useAppSelector} from "./redux/reduxHooks"
-import {logInUserId, logInUsername} from "./redux/LoginReducer"
-import getUsername from "./AppBackend"
-import {getAuth, onAuthStateChanged} from "firebase/auth"
+import usePersistAuth from "./hooks/usePersistAuth"
+import useClearNotes from "./hooks/useClearNotes"
 import {Routes, Route, useLocation} from 'react-router-dom'
 import { ThemeProvider } from '@mui/material/styles'
 import { APP_COLOR } from "./utils/constants"
 import NavBar from "./components/NavBar/NavBar"
 import AppTheme from "./AppStyles"
-import {useEffect} from 'react'
+import {useEffect, useState} from 'react'
 
 
 
 function App() {
-  const dispatch = useAppDispatch();
-  const userId = useAppSelector((state : any) => state.login.userId);
+  usePersistAuth();
 
-  useEffect(() => {
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user : any) => {
-        if (user) {
-            dispatch(logInUserId(user.uid));
-        } else {
-            dispatch(logInUserId(""));
-        }
-    })
+  useClearNotes();
 
-  }, [])
-
-  useEffect(() => {
-    updateUsername();
-  }, [userId])
-
-  const updateUsername = async () => {
-    if (userId != "") {
-        const newUsername = await getUsername(userId);
-        dispatch(logInUsername(newUsername));
-    }
-  }
 
   document.body.style.backgroundColor = APP_COLOR;
 
@@ -57,9 +35,10 @@ function App() {
         <Routes location={backgroundPage || url}>
             <Route path="/" element={<HomePageView />} />
             <Route path="/user/:uid" element={<ProfileView />} />
+            <Route path="/track/:trackId" element={<MusicMakerDisplay />} />
             <Route path="/login" element={<LoginView />} />
             <Route path="/register" element={<RegisterView />} />
-            <Route path="/create" element={<MusicMakerView />} />
+            <Route path="/create" element={<MusicMakerCreate />} />
 
         </Routes>
 

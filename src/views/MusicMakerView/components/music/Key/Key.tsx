@@ -13,7 +13,7 @@ import MusicPlayer from "../MusicPlayer/MusicPlayer"
 import {addAction, removeAction, editAction} from "../../../redux/notesReducer"
 import {gsap} from "gsap"
 
-function Key({instrument, note, progress, id, grey} : KeyProps) {
+function Key({instrument, note, progress, id, grey, readOnly} : KeyProps) {
     const [playNote, setPlayNote] = useState<boolean>(false);
 
     const keyDiv = useRef<any>();
@@ -26,10 +26,18 @@ function Key({instrument, note, progress, id, grey} : KeyProps) {
     const [currentNoteInfo, setCurrentNoteInfo] = useState<INoteInfo>(DefaultNoteInfo);
 
     const removeNote = (id : string) => {
+        if (readOnly) {
+            return
+        }
+
         dispatch(removeAction(instrument, note, id));
     };
 
     const moveNote = (id : string, left : number, leftChange : number, right : number, rightChange : number) => {
+        if (readOnly) {
+            return
+        }
+
         dispatch(editAction(instrument, note, id, left, leftChange, right, rightChange, keyDiv.current.offsetX));
 
     }
@@ -45,6 +53,7 @@ function Key({instrument, note, progress, id, grey} : KeyProps) {
                 removeNote={removeNote}
                 moveNote={moveNote}
                 progress={progress}
+                readOnly={readOnly}
             />
         );
     };
@@ -53,6 +62,10 @@ function Key({instrument, note, progress, id, grey} : KeyProps) {
     let currentNote = currentNoteInfo ? makeNote(currentNoteInfo["id"], currentNoteInfo[LEFT_KEY], currentNoteInfo[RIGHT_KEY]) : null;
 
     const onMouseDown = (event : any) => {
+        if (readOnly) {
+            return
+        }
+
         if (!isDrawing) {
             setIsDrawing(true);
             setCurrentNoteInfo((prev) => {
@@ -66,6 +79,10 @@ function Key({instrument, note, progress, id, grey} : KeyProps) {
     };
 
     const onMouseMove = (event : any) => {
+        if (readOnly) {
+            return
+        }
+
         if (isDrawing) {
             setCurrentNoteInfo((prev) => {
                 return {
@@ -77,6 +94,10 @@ function Key({instrument, note, progress, id, grey} : KeyProps) {
     };
 
     const onMouseUp = (event : any) => {
+        if (readOnly) {
+            return
+        }
+
         if (isDrawing) {
             if (currentNoteInfo[RIGHT_KEY] - currentNoteInfo[LEFT_KEY] > 2) {
                 dispatch(addAction(instrument,

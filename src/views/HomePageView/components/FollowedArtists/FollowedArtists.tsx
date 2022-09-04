@@ -21,7 +21,6 @@ const FollowedArtists = ({following} : IFollowedArtistsProps) => {
     const getFollowedArtistsData = async () => {
         try {
             setFollowingData(await getFollowedArtists(following));
-            console.log("success")
         } catch (e: any) {
             console.log(e);
         }

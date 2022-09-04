@@ -3,7 +3,7 @@ import FavoriteBorderIcon from '@mui/icons-material/Favorite'
 import ILikeButtonProps from "./LikeButtonInterface"
 import {useState} from 'react'
 
-const LikeButton = ({id}: ILikeButtonProps) => {
+const LikeButton = ({trackId}: ILikeButtonProps) => {
     const [clicked, setClicked] = useState<boolean>(false);
 
     const onClick = () => {

@@ -13,7 +13,6 @@ function PlayButton() {
     const every = useAppSelector((state) => (state));
 
     const onClick = () => {
-        console.log(every);
         dispatch(togglePlay())
     }
 

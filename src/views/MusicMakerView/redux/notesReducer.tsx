@@ -4,7 +4,7 @@ import { INotesState, IInstrumentNotesState, INoteInfo, INoteActionPayload, INot
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 
-const makeDefaultState = () => {
+export const makeDefaultState = () => {
     let defaultState : INotesState = {};
 
     INSTRUMENTS.map((ele : string) => {

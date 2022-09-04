@@ -15,7 +15,10 @@ const DialogBackground = ({children} : IDialogBackgroundProps) => {
                             justifyContent: "center",
                             minWidth: "100%",
                             minHeight: "100%",
-                            zIndex: 9999
+                            left: "0%",
+                            top: "0%",
+                            zIndex: 9999,
+                            overflowY: "hidden"
                         }
                     }
         >

@@ -1,5 +1,6 @@
 import styles, {elementStyles} from "./NavBarStyles"
 import Typography from "@mui/material/Typography"
+import GitHubIcon from '@mui/icons-material/GitHub';
 import Button from "@mui/material/Button"
 import AppButton from "../AppButton/AppButton"
 import AppDivider from "../AppDivider/AppDivider"
@@ -13,25 +14,48 @@ import {useAppSelector} from "../../redux/reduxHooks"
 
 interface INavBarElementProps {
     to: string,
-    name: string
+    name: string,
+    children?: any,
+    external: boolean
 }
 
-const NavBarElement = ({to, name} : INavBarElementProps) => {
+const NavBarElement = ({to, name, children, external} : INavBarElementProps) => {
     const [hoverStyles, setHoverStyles] = useState<any>(elementStyles(false));
 
-    return (
-        <Link
-            to={to}
-            onMouseEnter={() => setHoverStyles(elementStyles(true))}
-            onMouseLeave={() => setHoverStyles(elementStyles(false))}
-            style={hoverStyles}
-       >
+    const linkContents = () => {
+        return (
+            <div
+                 onMouseEnter={() => setHoverStyles(elementStyles(true))}
+                 onMouseLeave={() => setHoverStyles(elementStyles(false))}
+                 style={hoverStyles}
+             >
 
-            <Typography variant="h6">
-                {name}
-            </Typography>
-        </Link>
-    );
+                     {children}
+                     &nbsp;
+                     <Typography variant="h6">
+                         {name}
+                     </Typography>
+
+             </div>
+        );
+    }
+
+    if (external) {
+        return (
+            <a href={to} target="_blank" style={{textDecoration: "none"}}>
+                {linkContents()}
+            </a>
+        );
+    } else {
+        return (
+            <Link
+                to={to}
+                style={{textDecoration: "none"}}
+           >
+                {linkContents()}
+            </Link>
+        );
+    }
 }
 
 function NavBar(props: any) {
@@ -39,7 +63,7 @@ function NavBar(props: any) {
 
     let menuItemMap : IMenuItemInfo[] = []
 
-    if (currentUser.userId == "") {
+    if (currentUser.userId == "none") {
         menuItemMap.push({name: "Login", link: "/login"})
         menuItemMap.push({name: "Register", link: "/register"})
     } else {
@@ -51,9 +75,13 @@ function NavBar(props: any) {
     return (
         <div style={styles()}>
             <div style={{display: "flex", minHeight: "100%"}}>
-                <NavBarElement to="/" name="Home" />
+                <NavBarElement to="/" name="Home" external={false} />
                 <AppDivider orientation="vertical"/>
-                <NavBarElement to="/create" name="Create" />
+                <NavBarElement to="/create" name="Create" external={false}/>
+                <AppDivider orientation="vertical"/>
+                <NavBarElement to="https://github.com/sauravbanna/musicmaker" name="GitHub" external={true}>
+                    <GitHubIcon />
+                </NavBarElement>
             </div>
             <SearchBar width={"30%"} />
             <AppMenu
