@@ -13,6 +13,7 @@ const LikedSongs = ({likedTracks} : ILikedSongsProps) => {
             {array.map((ele: number) => {
                 return (
                     <SongPreviewMini
+                        liked={false}
                         authorId=""
                         trackId=""
                         title="song" author="user3" duration="10:00" image="l"/>

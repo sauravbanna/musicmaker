@@ -1,5 +1,5 @@
 export default interface IAppIconButtonProps {
-    onClick: () => void,
+    onClick: (e: any) => void,
     icon: any,
     clickIcon: any,
     clicked: boolean,

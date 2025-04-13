@@ -2,8 +2,11 @@ import SongPreview from "../SongPreview/SongPreview"
 import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
 import IPostListProps from "./PostListInterface"
+import useGetLikedTracks from "../../hooks/useGetLikedTracks"
 
 const PostList = ({name, posts, justify, fullWidth} : IPostListProps) => {
+    const likedTracks = useGetLikedTracks();
+
     return (
         <>
             {name ?
@@ -65,6 +68,7 @@ const PostList = ({name, posts, justify, fullWidth} : IPostListProps) => {
                                 likes={ele.likes}
                                 comments={ele.comments}
                                 index={i}
+                                liked={likedTracks.includes(ele.trackId)}
                              />
                         );
                     })}

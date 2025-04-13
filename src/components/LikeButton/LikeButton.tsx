@@ -1,13 +1,31 @@
 import AppIconButton from "../AppIconButton/AppIconButton"
 import FavoriteBorderIcon from '@mui/icons-material/Favorite'
+import PendingIcon from '@mui/icons-material/Pending';
 import ILikeButtonProps from "./LikeButtonInterface"
-import {useState} from 'react'
+import {like, unLike} from "../../backend/SendLike"
+import {useState, useEffect} from 'react'
 
-const LikeButton = ({trackId}: ILikeButtonProps) => {
-    const [clicked, setClicked] = useState<boolean>(false);
+const LikeButton = ({trackId, liked}: ILikeButtonProps) => {
+    const [clicked, setClicked] = useState<boolean>(liked);
 
-    const onClick = () => {
-        setClicked((prev: boolean) => !prev);
+    useEffect(() => {
+        console.log(liked);
+        setClicked(liked);
+    }, [liked])
+
+    const onClick = async (e: any) => {
+        e.stopPropagation();
+
+        try {
+            if (!clicked) {
+                await like(trackId, true);
+            } else {
+                await unLike(trackId, true);
+            }
+            setClicked((prev: boolean) => !prev);
+        } catch (e: any) {
+            console.log(e);
+        }
     }
 
     return (

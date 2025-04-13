@@ -18,7 +18,7 @@ interface IOpacityRef {
     opacity: number
 }
 
-function SongPreview({trackId, title, date, author, duration, authorId, image, likes, comments, index} : ISongPreviewProps) {
+function SongPreview({trackId, title, date, author, duration, authorId, image, likes, comments, index, liked} : ISongPreviewProps) {
     const [expanded, setExpanded] = useState<boolean>(false);
     const fadeDiv = useFadeInComponent(index);
 
@@ -85,7 +85,7 @@ function SongPreview({trackId, title, date, author, duration, authorId, image, l
                         {duration}
                     </Typography>
                     &nbsp;
-                    <SongPreviewButtons trackId={trackId} likes={likes.length} comments={comments.length} expanded={expanded} setExpand={setExpanded} />
+                    <SongPreviewButtons trackId={trackId} likes={likes.length} comments={comments.length} expanded={expanded} setExpand={setExpanded} liked={liked}/>
                 </Grid>
             </Grid>
             <Accordion

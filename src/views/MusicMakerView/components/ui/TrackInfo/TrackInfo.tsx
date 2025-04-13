@@ -46,7 +46,7 @@ const TrackInfo = ({title, image, description, username, date, likes, id} : ITra
                 justifyContent="space-between"
             >
                 <div>
-                    <LikeButton trackId={id}/>
+                    <LikeButton trackId={id} liked={false}/>
                     {likes.length}
                 </div>
             </Stack>

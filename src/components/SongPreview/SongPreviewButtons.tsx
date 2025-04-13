@@ -10,9 +10,10 @@ import {ISongPreviewButtonsProps} from "./SongPreviewInterface"
 
 
 
-const SongPreviewButtons = ({trackId, likes, comments, expanded, setExpand} : ISongPreviewButtonsProps) => {
+const SongPreviewButtons = ({trackId, likes, comments, expanded, setExpand, liked} : ISongPreviewButtonsProps) => {
 
-    const onClick = () => {
+    const onClick = (e : any) => {
+        e.stopPropagation();
         setExpand((prev : boolean) => !prev);
     }
 
@@ -22,7 +23,7 @@ const SongPreviewButtons = ({trackId, likes, comments, expanded, setExpand} : IS
             spacing={1}
             alignItems="center"
         >
-            <LikeButton trackId={trackId}/>
+            <LikeButton trackId={trackId} liked={liked}/>
             <Typography variant="subtitle2" >
                 {likes}
             </Typography>

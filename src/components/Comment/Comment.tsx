@@ -1,8 +1,8 @@
 import Grid from "@mui/material/Grid"
 import Typography from "@mui/material/Typography"
-import LikeButton from "../LikeButton/LikeButton"
+import ICommentProps from "./CommentInterface"
 
-const Comment = () => {
+const Comment = ({trackId} : ICommentProps) => {
     const name = "user2"
     const date = "A few seconds ago"
     const comment = "wow good job"
@@ -37,11 +37,6 @@ const Comment = () => {
                 <Typography variant="subtitle2">
                     {comment}
                 </Typography>
-            </Grid>
-            <Grid item xs={1}>
-            </Grid>
-            <Grid item xs={11}>
-                <LikeButton trackId={"default"}/>
             </Grid>
         </Grid>
     );

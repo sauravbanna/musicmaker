@@ -16,7 +16,6 @@ import {getAuth} from "firebase/auth"
 const HomePageView = () => {
     const currentUser = useAppSelector((state : any) => state.login)
 
-
     const [userData, setUserData] = useState<IUserHomeData>({
         following: [],
         likedTracks: [],

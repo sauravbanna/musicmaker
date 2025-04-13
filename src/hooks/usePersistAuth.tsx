@@ -26,7 +26,6 @@ const usePersistAuth = () => {
 
     const updateUsername = async () => {
     if (userId != "none" && userId) {
-        console.log(userId);
         const newUsername = await getUsername(userId);
         dispatch(logInUsername(newUsername));
     }

@@ -6,7 +6,8 @@ export interface ISongPreviewMiniProps {
     author: string,
     duration: string,
     authorId: string,
-    image: string
+    image: string,
+    liked: boolean
 }
 
 export interface ISongPreviewProps extends ISongPreviewMiniProps {
@@ -21,7 +22,8 @@ export interface ISongPreviewButtonsProps {
     expanded: boolean,
     setExpand: Function,
     likes: number,
-    comments: number
+    comments: number,
+    liked: boolean
 }
 
 export interface ISongCommentsProps {

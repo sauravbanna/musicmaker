@@ -8,7 +8,7 @@ import LogOutDialog from "./views/LogOutDialog/view/LogOutDialog"
 import UploadDialog from "./views/UploadDialog/view/UploadDialog"
 import usePersistAuth from "./hooks/usePersistAuth"
 import useClearNotes from "./hooks/useClearNotes"
-import {Routes, Route, useLocation} from 'react-router-dom'
+import {Routes, Route, useLocation, Navigate} from 'react-router-dom'
 import { ThemeProvider } from '@mui/material/styles'
 import { APP_COLOR } from "./utils/constants"
 import NavBar from "./components/NavBar/NavBar"
@@ -44,7 +44,7 @@ function App() {
 
         <Routes>
             <Route path="/logout" element={<LogOutDialog prevLink={backgroundPage}/>} />
-            <Route path="/upload" element={<UploadDialog prevLink={backgroundPage} />} />
+            <Route path="/upload" element={backgroundPage ? <UploadDialog prevLink={backgroundPage} /> : <Navigate to="/" replace />}/>
         </Routes>
     </ThemeProvider>
   );

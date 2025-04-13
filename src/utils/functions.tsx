@@ -11,12 +11,21 @@ export function getErrorMessage(error: any) : string {
 export function getTimeDiff(date : Timestamp) : string {
     const timeDiffMillis = Date.now() - date.toMillis();
 
-    if (Math.floor(timeDiffMillis / (1000*60*60*24*365)) != 0) {
-        return `${Math.floor(timeDiffMillis / (1000*60*60*24*365))} years ago`;
-    } else if (Math.floor(timeDiffMillis / (1000*60*60*24)) != 0) {
-       return `${Math.floor(timeDiffMillis / (1000*60*60*24))} days ago`;
-   } else if (Math.floor(timeDiffMillis / (1000*60*60)) != 0) {
-      return `${Math.floor(timeDiffMillis / (1000*60*60))} hours ago`;
+    const second = 1000;
+    const minute = second * 60;
+    const hour = minute * 60;
+    const day = hour * 24;
+    const year = day * 365;
+
+    if (Math.floor(timeDiffMillis / year) != 0) {
+        const years = Math.floor(timeDiffMillis / year);
+        return `${years} year${years > 1 ? "s" : ""} ago`;
+    } else if (Math.floor(timeDiffMillis / day) != 0) {
+       const days = Math.floor(timeDiffMillis / day);
+       return `${days} day${days > 1 ? "s" : ""} ago`;
+   } else if (Math.floor(timeDiffMillis / hour) != 0) {
+      const hours = Math.floor(timeDiffMillis / hour);
+      return `${hours} hour${hours > 1 ? "s" : ""} ago`;
   } else {
     return "Uploaded Recently"
   }

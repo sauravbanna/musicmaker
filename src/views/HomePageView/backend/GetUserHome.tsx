@@ -1,6 +1,7 @@
 import {getAuth} from "firebase/auth"
 import {database} from "../../../utils/config"
-import {doc, setDoc, getDocs, getDoc, query, where, collection, FieldPath} from "firebase/firestore"
+import {doc, getDoc} from "firebase/firestore"
+import {DEFAULT_HOME_DATA} from "../utils/constants"
 
 
 interface IUserData {
@@ -14,7 +15,6 @@ export interface IUserHomeData extends IUserData {
 
 const getUserHome = () : Promise<any> => {
     const auth = getAuth();
-
     if (auth.currentUser != null) {
         return getUserData(auth.currentUser.uid)
                 .then((userData : IUserData) => {

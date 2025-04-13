@@ -3,7 +3,7 @@ import AppIconButton from "../AppIconButton/AppIconButton"
 import SendIcon from '@mui/icons-material/Send'
 import {useState} from 'react'
 
-const CommentButton = ({trackId} : ICommentButtonProps) => {
+const CommentButton = ({trackId, onClick} : ICommentButtonProps) => {
     const [pressed, setPressed] = useState<boolean>(false);
 
     const onMouseDown = () => {
@@ -12,10 +12,6 @@ const CommentButton = ({trackId} : ICommentButtonProps) => {
 
     const onMouseUp = () => {
         setPressed(false);
-    }
-
-    const onClick = () => {
-        console.log("yea");
     }
 
     return (

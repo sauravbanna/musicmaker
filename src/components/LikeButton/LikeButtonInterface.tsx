@@ -1,3 +1,4 @@
 export default interface ILikeButtonProps {
-    trackId: string
+    trackId: string,
+    liked: boolean
 }
