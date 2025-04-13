@@ -1,0 +1,97 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function updateListsOnlyByUserId(incomingArray, existingArray, request) {
+      return ((incomingArray.size() - existingArray.size() == 1)
+                && (incomingArray[incomingArray.size() - 1] == request.auth.uid))
+            || ((incomingArray.size() - existingArray.size() == -1)
+                && (request.auth.uid in existingArray) && !(request.auth.uid in incomingArray));
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+    match /users/{user} {
+      function updateUniqueFollowingOnlyByOne() {
+
+        let incomingArray = request.resource.data.following;
+        let existingArray = resource.data.following;
+
+        return (incomingArray == existingArray)
+                || ((incomingArray != existingArray) && ((math.abs(incomingArray.size() - existingArray.size()) == 1)));
+      }
+
+      function checkIfFollowingUpdated() {
+        return !(request.resource.data.keys().hasAll(['following']))
+                || ((request.resource.data.keys().hasAll(['following'])) && updateUniqueFollowingOnlyByOne());
+      }
+
+      function isCurrentUserDocOwner() {
+        return request.auth != null && request.auth.uid == user;
+      }
+
+      allow read: if true;
+
+      allow delete: if isCurrentUserDocOwner();
+
+      allow create: if isCurrentUserDocOwner() && request.resource.data.following.size() == 0;
+
+      allow update: if isCurrentUserDocOwner() && checkIfFollowingUpdated();
+    }
+    match /tracks/{track} {
+      function isCreateRequestByCurrentUser() {
+        return request.auth != null && (request.resource.data.authorId == request.auth.uid) ;
+      }
+
+      allow read: if true;
+
+      allow create: if isCreateRequestByCurrentUser();
+
+      allow update, delete: if request.auth != null && request.resource.data.authorId == request.auth.uid;
+    }
+    match /followers/{followers} {
+      function loggedInUserNotMatching() {
+        return (request.auth != null) && (request.auth.uid != followers);
+      }
+
+      function loggedInUserMatching() {
+        return (request.auth != null) && (request.auth.uid == followers);
+      }
+
+      allow read: if true;
+
+      allow create, delete: if loggedInUserMatching();
+
+      allow update: if (request.auth != null);
+    }
+    match /feedback/{feedback} {
+
+      function checkWhichOneUpdated() {
+        return ((request.resource.data.keys().hasAll(['comments'])) && !(request.resource.data.keys().hasAll(['likes'])) && (checkProperCommentsUpdate()))
+                || ((request.resource.data.keys().hasAll(['likes'])) && !(request.resource.data.keys().hasAll(['comments'])) && (checkProperLikesUpdate()))
+      }
+
+      function checkProperLikesUpdate() {
+        let incomingLikes = request.resource.data.likes;
+        let existingLikes = resource.data.likes;
+
+        return (updateListsOnlyByUserId(incomingLikes, existingLikes, request));
+      }
+
+      function checkProperCommentsUpdate() {
+        let incomingComments = request.resource.data.comments;
+        let existingComments = resource.data.comments;
+
+        return (userUpdatingOnlyOnce(existingComments, incomingComments));
+      }
+
+      function userUpdatingOnlyOnce(existingArray, incomingArray) {
+        return math.abs(existingArray.size() - incomingArray.size()) == 1;
+      }
+
+      allow read: if true;
+
+      allow create, delete, update: if (request.auth != null);
+    }
+  }
+}
